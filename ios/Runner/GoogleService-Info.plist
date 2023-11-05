@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>557296019628-1hr9hc4dss6pg89hqehs3f618knqulaf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.557296019628-1hr9hc4dss6pg89hqehs3f618knqulaf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>557296019628-mn0tgk92v0plq5b0l0ctrqebsf48q4qo.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAHfa_cZOaN96b15Lf2YGGfor-LmzVMQoY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>557296019628</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.emerapp.app</string>
+	<key>PROJECT_ID</key>
+	<string>emerapp-59c53</string>
+	<key>STORAGE_BUCKET</key>
+	<string>emerapp-59c53.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:557296019628:ios:d2a99e5269937b6e609709</string>
+</dict>
+</plist>

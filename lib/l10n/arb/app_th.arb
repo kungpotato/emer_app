@@ -1,0 +1,7 @@
+{
+  "@@locale": "th",
+  "hello": "สวัสดีจ้า",
+  "@hello": {
+    "description": "just test"
+  }
+}

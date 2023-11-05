@@ -1,0 +1,28 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          field_rename: snake
+          checked: true
+          explicit_to_json: true
+
+      weather_mobx|property_multiply:
+        generate_for:
+          - lib/**/*.dart
+
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+#             - lint_a
+#             - lint_b
+
+
+builders:
+  property_multiply:
+    import: "package:weather_mobx/generators/generators.dart"
+    builder_factories: [ "multiplyBuilder" ]
+    build_extensions: { ".dart": [ "multiply.g.part" ] }
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: [ "source_gen|combining_builder" ]

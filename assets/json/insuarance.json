@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Bupa Thailand"
+  },
+  {
+    "id": 2,
+    "name": "Aetna International"
+  },
+  {
+    "id": 3,
+    "name": "Allianz Ayudhya"
+  },
+  {
+    "id": 4,
+    "name": "AXA Thailand"
+  },
+  {
+    "id": 5,
+    "name": "Cigna Thailand"
+  },
+  {
+    "id": 6,
+    "name": "Thai Health Insurance"
+  },
+  {
+    "id": 7,
+    "name": "Muang Thai Insurance"
+  },
+  {
+    "id": 8,
+    "name": "Bangkok Insurance"
+  },
+  {
+    "id": 9,
+    "name": "Chubb Samaggi Insurance"
+  },
+  {
+    "id": 10,
+    "name": "Dhipaya Insurance"
+  },
+  {
+    "id": 11,
+    "name": "Social Security Card"
+  },
+  {
+    "id": 12,
+    "name": "Universal Coverage Scheme (UCS)"
+  }
+]
