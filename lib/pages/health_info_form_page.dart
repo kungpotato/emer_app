@@ -28,6 +28,7 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
       await FsRef.health(context.authStore.profile!.id!)
           .doc(data.id)
           .update(data.toMap());
+      Navigator.pop(context, true);
     } else {
       await Navigator.push(
         context,

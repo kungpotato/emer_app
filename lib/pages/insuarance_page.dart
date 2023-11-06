@@ -4,6 +4,8 @@ import 'package:emer_app/app/services/firestore_ref.dart';
 import 'package:emer_app/data/user_insurance_data.dart';
 import 'package:emer_app/pages/insuarance_form_page.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
+import 'package:emer_app/shared/extensions/date_extension.dart';
+import 'package:emer_app/shared/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
@@ -47,12 +49,15 @@ class _InsurancePageState extends State<InsurancePage> {
 
   Widget _cardItem({required UserInsuranceData data}) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        final res = await Navigator.push(
             context,
-            MaterialPageRoute<void>(
+            MaterialPageRoute<bool?>(
               builder: (context) => InsuranceFromPage(data: data),
             ));
+        if (res ?? false) {
+          showSnack(context, text: 'Success');
+        }
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -81,16 +86,21 @@ class _InsurancePageState extends State<InsurancePage> {
                     data.company,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: context.theme.textTheme.titleMedium?.copyWith(),
+                    style: context.theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'W. ${data.name}',
                     style: context.theme.textTheme.bodySmall,
                   ),
                   Text(
-                    'ID ${data.id}',
+                    'ID ${data.policyNumber}',
                     style: context.theme.textTheme.bodySmall,
                   ),
+                  Text(
+                    'EXPIRED ${data.end.toDate().isoDate}',
+                    style: context.theme.textTheme.bodySmall,
+                  )
                 ],
               ),
             ),
@@ -103,15 +113,18 @@ class _InsurancePageState extends State<InsurancePage> {
   Widget _cardAdd() {
     return InkWell(
       onTap: () async {
-        await Navigator.push(
+        final res = await Navigator.push(
           context,
-          MaterialPageRoute<void>(
-            builder: (context) => const InsuranceFromPage(),
+          MaterialPageRoute<bool?>(
+            builder: (context) => const InsuranceFromPage(addAndBack: true),
           ),
         );
-        setState(() {
-          isEdit = false;
-        });
+        if (res ?? false) {
+          showSnack(context, text: 'Success');
+          setState(() {
+            isEdit = false;
+          });
+        }
       },
       child: Card(
         color: Colors.grey.shade400,

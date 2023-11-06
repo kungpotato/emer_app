@@ -23,11 +23,13 @@ final coverageList = [
 ];
 
 class InsuranceFromPage extends StatefulWidget {
-  const InsuranceFromPage({super.key, this.data, this.profile, this.health});
+  const InsuranceFromPage(
+      {super.key, this.data, this.profile, this.health, this.addAndBack});
 
   final UserInsuranceData? data;
   final ProfileData? profile;
   final HealthInfoData? health;
+  final bool? addAndBack;
 
   @override
   State<InsuranceFromPage> createState() => _InsuranceFromPageState();
@@ -105,17 +107,25 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
     });
 
     if (widget.data == null) {
-      await Navigator.push(
-        context,
-        MaterialPageRoute<bool?>(
-          builder: (context) => ConfirmPage(
-              profile: widget.profile, health: widget.health, insurance: data),
-        ),
-      );
+      if (widget.addAndBack ?? false) {
+        FsRef.insurance(context.authStore.profile!.id!).add(data.toMap());
+        Navigator.pop(context, true);
+      } else {
+        await Navigator.push(
+          context,
+          MaterialPageRoute<bool?>(
+            builder: (context) => ConfirmPage(
+                profile: widget.profile,
+                health: widget.health,
+                insurance: data),
+          ),
+        );
+      }
     } else {
-      FsRef.insurance(context.authStore.profile!.id!)
+      await FsRef.insurance(context.authStore.profile!.id!)
           .doc(widget.data!.id)
           .update(data.toMap());
+      Navigator.pop(context, true);
     }
   }
 

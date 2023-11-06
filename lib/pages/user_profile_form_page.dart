@@ -147,6 +147,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
       await FsRef.profileRef
           .doc(context.authStore.profile!.id)
           .update(data.toMap());
+      Navigator.pop(context, true);
     } else {
       await Navigator.push(
         context,
