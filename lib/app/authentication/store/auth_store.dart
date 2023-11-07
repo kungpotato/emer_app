@@ -18,7 +18,8 @@ enum AuthStatus {
   unauthenticated,
   userInfo,
   verify,
-  verifyEmail
+  verifyEmail,
+  noInternet
 }
 
 class AuthStore = AuthStoreBase with _$AuthStore;
@@ -59,6 +60,8 @@ abstract class AuthStoreBase with Store {
   void setVerifyState() => setStatus(AuthStatus.verify);
 
   void setVerifyEmailState() => setStatus(AuthStatus.verifyEmail);
+
+  void setDisConnectState() => setStatus(AuthStatus.noInternet);
 
   // @action
   // void setDbUser(UserModel val) => dbUser = val;
