@@ -98,10 +98,11 @@ class AppState extends State<App> {
     final authStore = Provider.of<AuthStore>(context, listen: false);
     disposer = reaction((_) => authStore.status, (status) {
       if (status == AuthStatus.noInternet) {
-        _navigator.pushReplacement(
+        _navigator.pushAndRemoveUntil(
           MaterialPageRoute<void>(
             builder: (context) => const NoInternetPage(),
           ),
+          (route) => false,
         );
       } else if (status == AuthStatus.unauthenticated) {
         _navigator.pushAndRemoveUntil(
@@ -111,10 +112,11 @@ class AppState extends State<App> {
           (route) => false,
         );
       } else if (status == AuthStatus.userInfo) {
-        _navigator.pushReplacement(
+        _navigator.pushAndRemoveUntil(
           MaterialPageRoute<void>(
             builder: (context) => const UserProfileFormPage(),
           ),
+          (route) => false,
         );
       } else if (status == AuthStatus.verify) {
         _navigator.push(

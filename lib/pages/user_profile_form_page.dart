@@ -168,99 +168,112 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: context.hideKeyBoard,
-      child: ReactiveForm(
-        formGroup: form,
-        child: Scaffold(
-          backgroundColor: context.theme.colorScheme.background,
-          appBar: AppBar(
-            title: const Text(''),
-            elevation: 0,
+    return WillPopScope(
+      onWillPop: () async {
+        if (form.touched) {
+          final res = await confirmBackForm(context);
+          if (res ?? false) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        return true;
+      },
+      child: GestureDetector(
+        onTap: context.hideKeyBoard,
+        child: ReactiveForm(
+          formGroup: form,
+          child: Scaffold(
             backgroundColor: context.theme.colorScheme.background,
-            iconTheme: const IconThemeData(color: Colors.black),
-          ),
-          bottomNavigationBar: SizedBox(
-            height: 50,
-            child: ReactiveFormConsumer(builder: (context, formGroup, child) {
-              return InkWell(
-                onTap: () async {
-                  if (formGroup.valid) {
-                    _onSubmit(formGroup.value);
-                  } else {
-                    printInvalidFields(formGroup.controls);
-                    formGroup.markAllAsTouched();
-                  }
-                },
-                child: ColoredBox(
-                  color: context.theme.primaryColor,
-                  child: Center(
-                    child: Text(
-                      widget.isEdit ? 'SUBMIT' : 'NEXT',
-                      style: context.theme.textTheme.headlineMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: Column(
-                children: [
-                  Text(
-                    'MY PROFILE',
-                    style: context.theme.textTheme.headlineMedium
-                        ?.copyWith(color: context.theme.primaryColor),
-                  ),
-                  const SizedBox(height: 20),
-                  InkWell(
-                    onTap: () async {
-                      var imagePickerService = ImagePickerService(
-                          context: context, fbRef: StRef.profileImgRef);
-                      final img = await imagePickerService.pickImage();
-                      if (img != null) {
-                        setState(() {
-                          photo = img;
-                        });
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        border: Border.all(
-                          color: context.theme.primaryColor,
-                          width: 2,
-                        ),
-                        shape: BoxShape.circle,
+            appBar: AppBar(
+              title: const Text(''),
+              elevation: 0,
+              backgroundColor: context.theme.colorScheme.background,
+              iconTheme: const IconThemeData(color: Colors.black),
+            ),
+            bottomNavigationBar: SizedBox(
+              height: 50,
+              child: ReactiveFormConsumer(builder: (context, formGroup, child) {
+                return InkWell(
+                  onTap: () async {
+                    if (formGroup.valid) {
+                      _onSubmit(formGroup.value);
+                    } else {
+                      printInvalidFields(formGroup.controls);
+                      formGroup.markAllAsTouched();
+                    }
+                  },
+                  child: ColoredBox(
+                    color: context.theme.primaryColor,
+                    child: Center(
+                      child: Text(
+                        widget.isEdit ? 'SUBMIT' : 'NEXT',
+                        style: context.theme.textTheme.headlineMedium
+                            ?.copyWith(color: Colors.white),
                       ),
-                      child: (photo?.isNotEmpty ?? false)
-                          ? CircleAvatar(
-                              radius: 50,
-                              backgroundImage: NetworkImage(
-                                photo!,
-                              ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Icon(
-                                Icons.add,
-                                size: 80,
-                                color: context.theme.primaryColor,
-                              ),
-                            ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  _buildInfo(),
-                  const SizedBox(height: 20),
-                  _buildAddress(),
-                  const SizedBox(height: 20),
-                  _buildContact(),
-                  const SizedBox(height: 20),
-                ],
+                );
+              }),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Column(
+                  children: [
+                    Text(
+                      'MY PROFILE',
+                      style: context.theme.textTheme.headlineMedium
+                          ?.copyWith(color: context.theme.primaryColor),
+                    ),
+                    const SizedBox(height: 20),
+                    InkWell(
+                      onTap: () async {
+                        var imagePickerService = ImagePickerService(
+                            context: context, fbRef: StRef.profileImgRef);
+                        final img = await imagePickerService.pickImage();
+                        if (img != null) {
+                          setState(() {
+                            photo = img;
+                          });
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          border: Border.all(
+                            color: context.theme.primaryColor,
+                            width: 2,
+                          ),
+                          shape: BoxShape.circle,
+                        ),
+                        child: (photo?.isNotEmpty ?? false)
+                            ? CircleAvatar(
+                                radius: 50,
+                                backgroundImage: NetworkImage(
+                                  photo!,
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 80,
+                                  color: context.theme.primaryColor,
+                                ),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildInfo(),
+                    const SizedBox(height: 20),
+                    _buildAddress(),
+                    const SizedBox(height: 20),
+                    _buildContact(),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           ),

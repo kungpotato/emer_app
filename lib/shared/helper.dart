@@ -20,7 +20,9 @@ Color hexToColor(String hexColorCode) {
 MaterialColor colorToMaterialColor(Color color) {
   final strengths = <double>[.05];
   final swatch = <int, Color>{};
-  final int r = color.red, g = color.green, b = color.blue;
+  final int r = color.red,
+      g = color.green,
+      b = color.blue;
 
   for (var i = 1; i < 10; i++) {
     strengths.add(0.1 * i);
@@ -83,4 +85,26 @@ DateTime parseDate(String dateString) {
   int year = int.parse(parts[2]);
 
   return DateTime(year, month, day);
+}
+
+Future<bool?> confirmBackForm(BuildContext context) async {
+  return showDialog(
+    context: context,
+    builder: (context) =>
+    new AlertDialog(
+      title: new Text('Confirm'),
+      content: new Text(
+          'Do you want to go back? Any changes you made will not be saved.'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: new Text('No'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: new Text('Yes'),
+        ),
+      ],
+    ),
+  );
 }
