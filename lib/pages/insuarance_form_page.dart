@@ -153,107 +153,120 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: context.hideKeyBoard,
-      child: ReactiveForm(
-        formGroup: form,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Insurance'),
-            actions: [
-              if (widget.data == null)
-                TextButton(
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute<bool?>(
-                          builder: (context) => ConfirmPage(
-                            profile: widget.profile,
-                            health: widget.health,
+    return WillPopScope(
+      onWillPop: () async {
+        if (form.touched) {
+          final res = await confirmBackForm(context);
+          if (res ?? false) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        return true;
+      },
+      child: GestureDetector(
+        onTap: context.hideKeyBoard,
+        child: ReactiveForm(
+          formGroup: form,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Insurance'),
+              actions: [
+                if (widget.data == null)
+                  TextButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute<bool?>(
+                            builder: (context) => ConfirmPage(
+                              profile: widget.profile,
+                              health: widget.health,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Skip',
-                      style: context.theme.textTheme.labelMedium
-                          ?.copyWith(color: context.theme.primaryColor),
-                    ))
-            ],
-          ),
-          bottomNavigationBar: SizedBox(
-            height: 50,
-            child: ReactiveFormConsumer(builder: (context, formGroup, child) {
-              return InkWell(
-                onTap: () {
-                  // _onSubmit(formGroup.value);
-                  if (formGroup.valid) {
-                    _onSubmit(formGroup.value);
-                  } else {
-                    formGroup.markAllAsTouched();
-                  }
-                },
-                child: ColoredBox(
-                  color: context.theme.primaryColor,
-                  child: Center(
-                    child: Text(
-                      widget.data != null ? 'SUBMIT' : 'NEXT',
-                      style: context.theme.textTheme.headlineMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.only(right: 15, left: 15),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildMedical(),
-                  _buildAgent(),
-                  SizedBox(height: 15),
-                  InkWell(
-                    onTap: () async {
-                      var imagePickerService = ImagePickerService(
-                          context: context, fbRef: StRef.insuranceImgRef);
-                      final img = await imagePickerService.pickImage();
-                      if (img != null) {
-                        setState(() {
-                          photo = img;
-                        });
-                      }
-                    },
-                    child: Container(
-                      width: double.maxFinite,
-                      child: Card(
-                        color: Colors.grey.shade300,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        elevation: 8,
-                        clipBehavior: Clip.hardEdge,
-                        child: photo != null
-                            ? Image.network(
-                                photo!,
-                                fit: BoxFit.fill,
-                                width: double.maxFinite,
-                                height: 200,
-                              )
-                            : Padding(
-                                padding: EdgeInsets.only(top: 40, bottom: 40),
-                                child: Text(
-                                  'Upload Your\n Insurance Card',
-                                  textAlign: TextAlign.center,
-                                  style: context.theme.textTheme.headlineSmall
-                                      ?.copyWith(color: Colors.grey),
-                                ),
-                              ),
+                        );
+                      },
+                      child: Text(
+                        'Skip',
+                        style: context.theme.textTheme.labelMedium
+                            ?.copyWith(color: context.theme.primaryColor),
+                      ))
+              ],
+            ),
+            bottomNavigationBar: SizedBox(
+              height: 50,
+              child: ReactiveFormConsumer(builder: (context, formGroup, child) {
+                return InkWell(
+                  onTap: () {
+                    // _onSubmit(formGroup.value);
+                    if (formGroup.valid) {
+                      _onSubmit(formGroup.value);
+                    } else {
+                      formGroup.markAllAsTouched();
+                    }
+                  },
+                  child: ColoredBox(
+                    color: context.theme.primaryColor,
+                    child: Center(
+                      child: Text(
+                        widget.data != null ? 'SUBMIT' : 'NEXT',
+                        style: context.theme.textTheme.headlineMedium
+                            ?.copyWith(color: Colors.white),
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                ],
+                );
+              }),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.only(right: 15, left: 15),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildMedical(),
+                    _buildAgent(),
+                    SizedBox(height: 15),
+                    InkWell(
+                      onTap: () async {
+                        var imagePickerService = ImagePickerService(
+                            context: context, fbRef: StRef.insuranceImgRef);
+                        final img = await imagePickerService.pickImage();
+                        if (img != null) {
+                          setState(() {
+                            photo = img;
+                          });
+                        }
+                      },
+                      child: Container(
+                        width: double.maxFinite,
+                        child: Card(
+                          color: Colors.grey.shade300,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          elevation: 8,
+                          clipBehavior: Clip.hardEdge,
+                          child: photo != null
+                              ? Image.network(
+                                  photo!,
+                                  fit: BoxFit.fill,
+                                  width: double.maxFinite,
+                                  height: 200,
+                                )
+                              : Padding(
+                                  padding: EdgeInsets.only(top: 40, bottom: 40),
+                                  child: Text(
+                                    'Upload Your\n Insurance Card',
+                                    textAlign: TextAlign.center,
+                                    style: context.theme.textTheme.headlineSmall
+                                        ?.copyWith(color: Colors.grey),
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           ),

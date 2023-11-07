@@ -4,6 +4,7 @@ import 'package:emer_app/data/profile_data.dart';
 import 'package:emer_app/pages/insuarance_form_page.dart';
 import 'package:emer_app/pages/user_profile_form_page.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
+import 'package:emer_app/shared/helper.dart';
 import 'package:emer_app/shared/widget/input_widget.dart';
 import 'package:emer_app/shared/widget/select_widget.dart';
 import 'package:flutter/material.dart';
@@ -94,66 +95,79 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: context.hideKeyBoard,
-      child: ReactiveForm(
-        formGroup: form,
-        child: Scaffold(
-          backgroundColor: context.theme.colorScheme.background,
-          appBar: AppBar(
-            title: const Text(''),
-            elevation: 0,
+    return WillPopScope(
+      onWillPop: () async {
+        if (form.touched) {
+          final res = await confirmBackForm(context);
+          if (res ?? false) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        return true;
+      },
+      child: GestureDetector(
+        onTap: context.hideKeyBoard,
+        child: ReactiveForm(
+          formGroup: form,
+          child: Scaffold(
             backgroundColor: context.theme.colorScheme.background,
-            iconTheme: const IconThemeData(color: Colors.black),
-          ),
-          bottomNavigationBar: SizedBox(
-            height: 50,
-            child: ReactiveFormConsumer(
-              builder: (context, formGroup, child) {
-                return InkWell(
-                  onTap: () async {
-                    // _onSubmit(formGroup.value);
-                    if (formGroup.valid) {
-                      _onSubmit(formGroup.value);
-                    } else {
-                      formGroup.markAllAsTouched();
-                    }
-                  },
-                  child: ColoredBox(
-                    color: context.theme.primaryColor,
-                    child: Center(
-                      child: Text(
-                        widget.data != null ? 'SUBMIT' : 'NEXT',
-                        style: context.theme.textTheme.headlineMedium
-                            ?.copyWith(color: Colors.white),
+            appBar: AppBar(
+              title: const Text(''),
+              elevation: 0,
+              backgroundColor: context.theme.colorScheme.background,
+              iconTheme: const IconThemeData(color: Colors.black),
+            ),
+            bottomNavigationBar: SizedBox(
+              height: 50,
+              child: ReactiveFormConsumer(
+                builder: (context, formGroup, child) {
+                  return InkWell(
+                    onTap: () async {
+                      // _onSubmit(formGroup.value);
+                      if (formGroup.valid) {
+                        _onSubmit(formGroup.value);
+                      } else {
+                        formGroup.markAllAsTouched();
+                      }
+                    },
+                    child: ColoredBox(
+                      color: context.theme.primaryColor,
+                      child: Center(
+                        child: Text(
+                          widget.data != null ? 'SUBMIT' : 'NEXT',
+                          style: context.theme.textTheme.headlineMedium
+                              ?.copyWith(color: Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: Column(
-                children: [
-                  Text(
-                    'HEALTH INFOMATION',
-                    textAlign: TextAlign.center,
-                    style: context.theme.textTheme.headlineSmall
-                        ?.copyWith(color: context.theme.primaryColor),
-                  ),
-                  const SizedBox(height: 20),
-                  _buildMedical(),
-                  const SizedBox(height: 20),
-                  _buildPersonalPhy(),
-                  const SizedBox(height: 20),
-                  _buildHospital(),
-                  const SizedBox(height: 20),
-                  _buildContact(),
-                  const SizedBox(height: 20),
-                ],
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Column(
+                  children: [
+                    Text(
+                      'HEALTH INFOMATION',
+                      textAlign: TextAlign.center,
+                      style: context.theme.textTheme.headlineSmall
+                          ?.copyWith(color: context.theme.primaryColor),
+                    ),
+                    const SizedBox(height: 20),
+                    _buildMedical(),
+                    const SizedBox(height: 20),
+                    _buildPersonalPhy(),
+                    const SizedBox(height: 20),
+                    _buildHospital(),
+                    const SizedBox(height: 20),
+                    _buildContact(),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           ),
