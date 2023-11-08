@@ -7,6 +7,7 @@ import 'package:emer_app/data/health_info_data.dart';
 import 'package:emer_app/data/profile_data.dart';
 import 'package:emer_app/data/province_thai_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobx/mobx.dart';
 
@@ -135,7 +136,14 @@ abstract class AuthStoreBase with Store {
   Future<void> signInWithGoogle() async {
     setLoading(true);
     try {
-      await auth.signInWithProvider(GoogleAuthProvider());
+      // await auth.signInWithProvider(GoogleAuthProvider());
+      final googleUser = await GoogleSignIn().signIn();
+      final googleAuth = await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (err, st) {
       handleError(err, st);
       setLoading(false);
