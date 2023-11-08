@@ -127,6 +127,11 @@ abstract class AuthStoreBase with Store {
         email: email,
         password: password,
       );
+    } on FirebaseAuthException catch (err, st) {
+      handleError(err, st);
+      if (err.code == 'INVALID_LOGIN_CREDENTIALS') {
+        throw Exception('ไม่พบผู้ใช้งาน');
+      }
     } catch (err, st) {
       handleError(err, st);
       setLoading(false);

@@ -3,6 +3,7 @@ import 'package:emer_app/app/authentication/signup_page.dart';
 import 'package:emer_app/core/exceptions/app_error_hadler.dart';
 import 'package:emer_app/pages/reset_password_page.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
+import 'package:emer_app/shared/helper.dart';
 import 'package:emer_app/shared/utils/validator_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -38,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.all(30),
                 child: isLoad
                     ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+                        child: CircularProgressIndicator(),
+                      )
                     : _buildBody(),
               ),
             ],
@@ -133,8 +134,11 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               InkWell(
                 onTap: () async {
-                  Navigator.push(context, MaterialPageRoute<void>(
-                    builder: (context) => ResetPasswordPage(),));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (context) => ResetPasswordPage(),
+                      ));
                 },
                 child: Text(
                   'Forgot password',
@@ -161,15 +165,12 @@ class _LoginPageState extends State<LoginPage> {
                         _emailController.value.text,
                         _passwordController.value.text,
                       );
-                    } catch (e) {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(e.toString())),
-                        );
-                        setState(() {
-                          isLoad = false;
-                        });
-                      }
+                    } catch (err) {
+                      setState(() {
+                        isLoad = false;
+                      });
+
+                      showSnack(context, text: err.toString());
                     }
                   }
                 },
