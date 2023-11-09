@@ -114,6 +114,12 @@ abstract class AuthStoreBase with Store {
         email: email,
         password: password,
       );
+    } on FirebaseAuthException catch (err, st) {
+      handleError(err, st);
+      setLoading(false);
+      if (err.code == 'email-already-in-use') {
+        throw Exception('Email นี้มีผู้ใช้งานแล้ว');
+      }
     } catch (err, st) {
       handleError(err, st);
       setLoading(false);
@@ -129,6 +135,7 @@ abstract class AuthStoreBase with Store {
       );
     } on FirebaseAuthException catch (err, st) {
       handleError(err, st);
+      setLoading(false);
       if (err.code == 'INVALID_LOGIN_CREDENTIALS') {
         throw Exception('ไม่พบผู้ใช้งาน');
       }

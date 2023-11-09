@@ -3,6 +3,7 @@ import 'package:emer_app/shared/extensions/context_extension.dart';
 import 'package:emer_app/shared/helper.dart';
 import 'package:emer_app/shared/utils/validator_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -36,9 +37,17 @@ class _SignUpPageState extends State<SignUpPage> {
                 left: 0,
                 child: Image.asset('assets/images/shape.png'),
               ),
-              Padding(
-                padding: const EdgeInsets.all(30),
-                child: _buildBody(),
+              Observer(
+                builder: (context) => Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: context.authStore.loading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : _buildBody(),
+                ),
               ),
             ],
           ),
@@ -186,14 +195,21 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: SizedBox(
                             width: 150,
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   if (_passwordController.value.text ==
                                       _passwordController2.value.text) {
-                                    context.authStore.register(
-                                      _emailController.value.text,
-                                      _passwordController.value.text,
-                                    );
+                                    try {
+                                      await context.authStore.register(
+                                        _emailController.value.text,
+                                        _passwordController.value.text,
+                                      );
+                                    } catch (err) {
+                                      showSnack(
+                                        context,
+                                        text: err.toString(),
+                                      );
+                                    }
                                   } else {
                                     showSnack(
                                       context,

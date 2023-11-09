@@ -6,6 +6,7 @@ import 'package:emer_app/shared/extensions/context_extension.dart';
 import 'package:emer_app/shared/helper.dart';
 import 'package:emer_app/shared/utils/validator_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,8 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController(text: 'test@mail.com');
   final _passwordController = TextEditingController(text: '12345678');
 
-  bool isLoad = false;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,13 +34,15 @@ class _LoginPageState extends State<LoginPage> {
                 left: 0,
                 child: Image.asset('assets/images/shape.png'),
               ),
-              Padding(
-                padding: const EdgeInsets.all(30),
-                child: isLoad
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : _buildBody(),
+              Observer(
+                builder: (context) => Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: context.authStore.loading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : _buildBody(),
+                ),
               ),
             ],
           ),
@@ -53,195 +54,184 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildBody() {
     return Form(
       key: _formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const SizedBox(height: 60),
-          const Center(child: LogoWidget()),
-          const SizedBox(height: 50),
-          Text(
-            'Member',
-            style: context.theme.textTheme.headlineMedium
-                ?.copyWith(color: context.theme.primaryColor),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(25)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: const Offset(
-                    0,
-                    2,
-                  ), // changes position of shadow
-                ),
-              ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(height: 60),
+            const Center(child: LogoWidget()),
+            const SizedBox(height: 50),
+            Text(
+              'Member',
+              style: context.theme.textTheme.headlineMedium
+                  ?.copyWith(color: context.theme.primaryColor),
             ),
-            child: TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                hintText: 'Email',
-                prefixIcon: Icon(Icons.account_circle),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(25)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 6,
+                    offset: const Offset(
+                      0,
+                      2,
+                    ), // changes position of shadow
+                  ),
+                ],
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your email';
-                }
-                if (!ValidatorUtils.isValidEmail(value)) {
-                  return 'Incorrect Email';
-                }
-                return null;
-              },
-            ),
-          ),
-          const SizedBox(height: 25),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(25)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: const Offset(
-                    0,
-                    2,
-                  ), // changes position of shadow
+              child: TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                  prefixIcon: Icon(Icons.account_circle),
                 ),
-              ],
-            ),
-            child: TextFormField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                hintText: 'Password',
-                prefixIcon: Icon(Icons.lock),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
-                }
-                return null;
-              },
-              obscureText: true,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              InkWell(
-                onTap: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (context) => ResetPasswordPage(),
-                      ));
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!ValidatorUtils.isValidEmail(value)) {
+                    return 'Incorrect Email';
+                  }
+                  return null;
                 },
-                child: Text(
-                  'Forgot password',
-                  style: context.theme.textTheme.titleMedium?.copyWith(
-                    color: context.theme.primaryColor,
-                    fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 25),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(25)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 6,
+                    offset: const Offset(
+                      0,
+                      2,
+                    ), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  hintText: 'Password',
+                  prefixIcon: Icon(Icons.lock),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  return null;
+                },
+                obscureText: true,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) => ResetPasswordPage(),
+                        ));
+                  },
+                  child: Text(
+                    'Forgot password',
+                    style: context.theme.textTheme.titleMedium?.copyWith(
+                      color: context.theme.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 25),
+            Center(
+              child: SizedBox(
+                width: 150,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        await context.authStore.login(
+                          _emailController.value.text,
+                          _passwordController.value.text,
+                        );
+                      } catch (err) {
+                        showSnack(context, text: err.toString());
+                      }
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Text('LOGIN'),
                   ),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 25),
-          Center(
-            child: SizedBox(
-              width: 150,
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      setState(() {
-                        isLoad = true;
-                      });
-                      await context.authStore.login(
-                        _emailController.value.text,
-                        _passwordController.value.text,
-                      );
-                    } catch (err) {
-                      setState(() {
-                        isLoad = false;
-                      });
-
-                      showSnack(context, text: err.toString());
-                    }
-                  }
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text('LOGIN'),
-                ),
-              ),
             ),
-          ),
-          const SizedBox(height: 40),
-          Center(
-            child: Text(
-              'Or login with',
-              style: context.theme.textTheme.titleSmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(height: 25),
-          Center(
-            child: InkWell(
-              onTap: () async {
-                try {
-                  setState(() {
-                    isLoad = true;
-                  });
-                  await context.authStore.signInWithGoogle();
-                } catch (err, st) {
-                  handleError(err, st);
-                }
-                setState(() {
-                  isLoad = false;
-                });
-              },
-              child: Image.asset(
-                'assets/images/devicon_google.png',
-                fit: BoxFit.cover,
-                width: 35,
-              ),
-            ),
-          ),
-          const SizedBox(height: 25),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Dont't have account?",
+            const SizedBox(height: 40),
+            Center(
+              child: Text(
+                'Or login with',
                 style: context.theme.textTheme.titleSmall
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(width: 4),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (context) => const SignUpPage(),
-                    ),
-                  );
+            ),
+            const SizedBox(height: 25),
+            Center(
+              child: InkWell(
+                onTap: () async {
+                  try {
+                    await context.authStore.signInWithGoogle();
+                  } catch (err, st) {
+                    handleError(err, st);
+                  }
                 },
-                child: Text(
-                  'Sign up',
-                  style: context.theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: context.theme.primaryColor,
-                  ),
+                child: Image.asset(
+                  'assets/images/devicon_google.png',
+                  fit: BoxFit.cover,
+                  width: 35,
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Dont't have account?",
+                  style: context.theme.textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 4),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (context) => const SignUpPage(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Sign up',
+                    style: context.theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: context.theme.primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
