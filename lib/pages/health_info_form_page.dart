@@ -259,7 +259,6 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
                 .asMap()
                 .entries
                 .map((e) => ReactiveForm(
-                      key: UniqueKey(),
                       formGroup: e.value as FormGroup,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
