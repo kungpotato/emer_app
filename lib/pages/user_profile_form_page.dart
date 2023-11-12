@@ -320,6 +320,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                 style: context.theme.textTheme.titleLarge,
               ),
             ),
+            SizedBox(height: 15),
             InputWidget<String>(
               label: 'Citizen Id',
               name: 'idCard',
@@ -431,6 +432,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                 style: context.theme.textTheme.titleLarge,
               ),
             ),
+            SizedBox(height: 15),
             InputWidget<String>(label: 'Address', name: 'address.address'),
             SizedBox(height: 15),
             Row(
@@ -547,6 +549,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                 style: context.theme.textTheme.titleLarge,
               ),
             ),
+            SizedBox(height: 15),
             InputWidget<String>(
               label: 'Phone Number',
               name: 'contact.phone',

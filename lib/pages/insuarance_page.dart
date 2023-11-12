@@ -116,7 +116,7 @@ class _InsurancePageState extends State<InsurancePage> {
         final res = await Navigator.push(
           context,
           MaterialPageRoute<bool?>(
-            builder: (context) => const InsuranceFromPage(addAndBack: true),
+            builder: (context) => const InsuranceFromPage(hideSkip: true),
           ),
         );
         if (res ?? false) {
@@ -172,17 +172,13 @@ class _InsurancePageState extends State<InsurancePage> {
         ),
         body: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: list.map((e) => _cardItem(data: e)).toList(),
-                  ),
-                ),
-              ),
-              if (isEdit) _cardAdd(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                ...list.map((e) => _cardItem(data: e)).toList(),
+                if (isEdit) _cardAdd(),
+              ],
+            ),
           ),
         ),
       ),

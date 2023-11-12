@@ -192,6 +192,7 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
                 style: context.theme.textTheme.titleLarge,
               ),
             ),
+            SizedBox(height: 15),
             InputWidget<String>(
                 label: 'Chronic Disease', name: 'medicalHistory.chronic'),
             InputWidget<String>(
@@ -253,6 +254,7 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
                 ],
               ),
             ),
+            SizedBox(height: 15),
             ...formList.controls
                 .asMap()
                 .entries
@@ -346,6 +348,7 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
                 style: context.theme.textTheme.titleLarge,
               ),
             ),
+            SizedBox(height: 15),
             InputWidget<String>(
               label: 'Hospital Name 1',
               name: 'hospital1',
@@ -373,6 +376,7 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
                 style: context.theme.textTheme.titleLarge,
               ),
             ),
+            SizedBox(height: 15),
             InputWidget<String>(
               label: 'Emergency Number 1',
               name: 'phone1',

@@ -24,12 +24,12 @@ final coverageList = [
 
 class InsuranceFromPage extends StatefulWidget {
   const InsuranceFromPage(
-      {super.key, this.data, this.profile, this.health, this.addAndBack});
+      {super.key, this.data, this.profile, this.health, this.hideSkip = false});
 
   final UserInsuranceData? data;
   final ProfileData? profile;
   final HealthInfoData? health;
-  final bool? addAndBack;
+  final bool? hideSkip;
 
   @override
   State<InsuranceFromPage> createState() => _InsuranceFromPageState();
@@ -107,7 +107,7 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
     });
 
     if (widget.data == null) {
-      if (widget.addAndBack ?? false) {
+      if (widget.hideSkip ?? false) {
         FsRef.insurance(context.authStore.profile!.id!).add(data.toMap());
         Navigator.pop(context, true);
       } else {
@@ -174,23 +174,24 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
               title: const Text('Insurance'),
               actions: [
                 if (widget.data == null)
-                  TextButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute<bool?>(
-                            builder: (context) => ConfirmPage(
-                              profile: widget.profile,
-                              health: widget.health,
+                  if (widget.hideSkip != true)
+                    TextButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute<bool?>(
+                              builder: (context) => ConfirmPage(
+                                profile: widget.profile,
+                                health: widget.health,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Skip',
-                        style: context.theme.textTheme.labelMedium
-                            ?.copyWith(color: context.theme.primaryColor),
-                      ))
+                          );
+                        },
+                        child: Text(
+                          'Skip',
+                          style: context.theme.textTheme.labelMedium
+                              ?.copyWith(color: context.theme.primaryColor),
+                        ))
               ],
             ),
             bottomNavigationBar: SizedBox(
@@ -340,6 +341,7 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
                 style: context.theme.textTheme.titleLarge,
               ),
             ),
+            SizedBox(height: 15),
             _buildAutoComplete(),
             InputWidget<String>(
               label: 'Policy number',
@@ -394,6 +396,7 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
                 style: context.theme.textTheme.titleLarge,
               ),
             ),
+            SizedBox(height: 15),
             InputWidget<String>(
               label: 'Full Name',
               name: 'agentName',
