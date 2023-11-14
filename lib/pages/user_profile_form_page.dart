@@ -382,9 +382,9 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                   child: InputWidget<String>(
                     label: 'Height',
                     name: 'height',
-                    maxLength: 3,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(3)
                     ],
                     keyboardType: TextInputType.number,
                   ),
@@ -394,9 +394,9 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                   child: InputWidget<String>(
                     label: 'Weight',
                     name: 'weight',
-                    maxLength: 3,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(3)
                     ],
                     keyboardType: TextInputType.number,
                   ),
@@ -464,10 +464,10 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                 Flexible(
                   child: InputWidget<String>(
                     label: 'Postcode',
-                    maxLength: 5,
                     name: 'address.postcode',
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(5)
                     ],
                     keyboardType: TextInputType.number,
                   ),
@@ -561,9 +561,9 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
             InputWidget<String>(
               label: 'Phone Number',
               name: 'contact.phone',
-              maxLength: 10,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10)
               ],
               keyboardType: TextInputType.number,
             ),

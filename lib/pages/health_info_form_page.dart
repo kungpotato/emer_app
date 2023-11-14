@@ -378,18 +378,18 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
             InputWidget<String>(
               label: 'Emergency Number 1',
               name: 'phone1',
-              maxLength: 10,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10)
               ],
               keyboardType: TextInputType.number,
             ),
             InputWidget<String>(
               label: 'Emergency Number 2',
               name: 'phone2',
-              maxLength: 10,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10)
               ],
               keyboardType: TextInputType.number,
             )
