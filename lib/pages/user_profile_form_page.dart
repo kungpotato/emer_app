@@ -82,8 +82,12 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
           validators: [
             Validators.required,
           ]),
-      'height': FormControl<String>(value: profile?.height),
-      'weight': FormControl<String>(value: profile?.weight),
+      'height': FormControl<String>(value: profile?.height, validators: [
+        Validators.max(3),
+      ]),
+      'weight': FormControl<String>(value: profile?.weight, validators: [
+        Validators.max(3),
+      ]),
       'blood': FormControl<String>(value: profile?.blood, validators: [
         Validators.required,
       ]),
@@ -103,6 +107,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
         'postcode':
             FormControl<String>(value: profile?.address?.postcode, validators: [
           Validators.required,
+          Validators.max(5),
         ]),
         'country': FormControl<String>(
             value: profile?.address?.country ?? 'Thailand',
@@ -114,6 +119,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
         'phone':
             FormControl<String>(value: profile?.contact?.phone, validators: [
           Validators.required,
+          Validators.max(10),
         ]),
         'email':
             FormControl<String>(value: profile?.contact?.email, validators: [
@@ -501,6 +507,11 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      if (position != null)
+                        Icon(Icons.check_box,
+                            color: context.theme.primaryColor),
+                      if (position == null)
+                        Icon(Icons.close, color: Colors.red),
                       Text(
                         'Location',
                         style: context.theme.textTheme.bodyMedium,
