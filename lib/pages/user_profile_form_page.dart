@@ -82,12 +82,8 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
           validators: [
             Validators.required,
           ]),
-      'height': FormControl<String>(value: profile?.height, validators: [
-        Validators.max(3),
-      ]),
-      'weight': FormControl<String>(value: profile?.weight, validators: [
-        Validators.max(3),
-      ]),
+      'height': FormControl<String>(value: profile?.height),
+      'weight': FormControl<String>(value: profile?.weight),
       'blood': FormControl<String>(value: profile?.blood, validators: [
         Validators.required,
       ]),
@@ -107,7 +103,6 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
         'postcode':
             FormControl<String>(value: profile?.address?.postcode, validators: [
           Validators.required,
-          Validators.max(5),
         ]),
         'country': FormControl<String>(
             value: profile?.address?.country ?? 'Thailand',
@@ -119,7 +114,6 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
         'phone':
             FormControl<String>(value: profile?.contact?.phone, validators: [
           Validators.required,
-          Validators.max(10),
         ]),
         'email':
             FormControl<String>(value: profile?.contact?.email, validators: [
@@ -388,6 +382,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                   child: InputWidget<String>(
                     label: 'Height',
                     name: 'height',
+                    maxLength: 3,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
@@ -399,6 +394,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                   child: InputWidget<String>(
                     label: 'Weight',
                     name: 'weight',
+                    maxLength: 3,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
@@ -468,6 +464,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                 Flexible(
                   child: InputWidget<String>(
                     label: 'Postcode',
+                    maxLength: 5,
                     name: 'address.postcode',
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -564,6 +561,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
             InputWidget<String>(
               label: 'Phone Number',
               name: 'contact.phone',
+              maxLength: 10,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],

@@ -75,10 +75,7 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
       'agentName': FormControl<String>(
         value: widget.data?.agentName,
       ),
-      'agentNumber':
-          FormControl<String>(value: widget.data?.agentNumber, validators: [
-        Validators.min(10),
-      ]),
+      'agentNumber': FormControl<String>(value: widget.data?.agentNumber),
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final res = await loadJson();
@@ -405,6 +402,7 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
             InputWidget<String>(
               label: 'Phone Number',
               name: 'agentNumber',
+              maxLength: 10,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],

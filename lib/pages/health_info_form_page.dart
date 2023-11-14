@@ -58,11 +58,8 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
       ]),
       'hospital2': FormControl<String>(value: widget.data?.hospital2),
       'phone1': FormControl<String>(
-          value: widget.data?.phone1,
-          validators: [Validators.required, Validators.min(10)]),
-      'phone2': FormControl<String>(value: widget.data?.phone2, validators: [
-        Validators.min(10),
-      ]),
+          value: widget.data?.phone1, validators: [Validators.required]),
+      'phone2': FormControl<String>(value: widget.data?.phone2),
       'medicalHistory': FormGroup({
         'chronic':
             FormControl<String>(value: widget.data?.medicalHistory.chronic),
@@ -381,6 +378,7 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
             InputWidget<String>(
               label: 'Emergency Number 1',
               name: 'phone1',
+              maxLength: 10,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
@@ -389,6 +387,7 @@ class _UserProfileFormPageState extends State<HealthInfoFormPage> {
             InputWidget<String>(
               label: 'Emergency Number 2',
               name: 'phone2',
+              maxLength: 10,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],

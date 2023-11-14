@@ -11,6 +11,7 @@ class InputWidget<T> extends StatelessWidget {
   final void Function(FormControl<T>)? onTap;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final int? maxLength;
 
   const InputWidget({
     Key? key,
@@ -22,6 +23,7 @@ class InputWidget<T> extends StatelessWidget {
     this.onTap,
     this.controller,
     this.focusNode,
+    this.maxLength,
   }) : super(key: key);
 
   @override
@@ -46,6 +48,7 @@ class InputWidget<T> extends StatelessWidget {
           controller: controller,
           focusNode: focusNode,
           onTap: onTap,
+          maxLength: maxLength,
           decoration: InputDecoration(labelText: label, isDense: true),
           inputFormatters: inputFormatters,
           keyboardType: keyboardType,
