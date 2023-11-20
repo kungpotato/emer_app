@@ -7,6 +7,9 @@
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:label="Lifelink">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCg7rWp6I7ET2VI996v90UuVRgNqy2VzDI" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
