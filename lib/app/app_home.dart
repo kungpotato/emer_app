@@ -27,7 +27,10 @@ class _AppHomeState extends State<AppHome> {
     const ProfilePage(),
   ];
 
-  void _onItemTapped(int index) {
+  Future<void> _onItemTapped(int index) async {
+    if (_selectedIndex == 1) {
+      await Future<void>.delayed(Duration(seconds: 3));
+    }
     setState(() {
       _selectedIndex = index;
     });
@@ -35,6 +38,30 @@ class _AppHomeState extends State<AppHome> {
 
   AppBar? _getTitle() {
     switch (_selectedIndex) {
+      case 1:
+        return AppBar(
+          title: const Text(''),
+          elevation: 0,
+          leading: Icon(
+            Icons.arrow_back_ios,
+            color: context.theme.primaryColor,
+          ),
+          actions: [
+            TextButton.icon(
+              onPressed: () {},
+              label: Text(
+                'ADD MEMBER',
+                style: context.theme.textTheme.labelSmall?.copyWith(
+                    color: context.theme.primaryColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              icon: Icon(
+                Icons.qr_code,
+                color: context.theme.primaryColor,
+              ),
+            )
+          ],
+        );
       case 3:
         return AppBar(
           title: const Text(''),
@@ -58,6 +85,7 @@ class _AppHomeState extends State<AppHome> {
     return Scaffold(
       appBar: _getTitle(),
       body: _widgetOptions.elementAt(_selectedIndex),
+      extendBodyBehindAppBar: true,
       bottomNavigationBar: BottomNavCustom(
         selectedIndex: _selectedIndex,
         onItemTap: _onItemTapped,

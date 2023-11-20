@@ -57,7 +57,9 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
   void initState() {
     super.initState();
     _initFormGroups();
-    _getCurrentLocation();
+    if (context.authStore.profile?.address?.location == null) {
+      _getCurrentLocation();
+    }
     setState(() {
       photo =
           context.authStore.profile?.img ?? context.authStore.user?.photoURL;
@@ -71,14 +73,16 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
         Validators.required,
       ]),
       'namePrefix':
-          FormControl<String>(value: profile?.namePrefix, validators: [
+      FormControl<String>(value: profile?.namePrefix, validators: [
         Validators.required,
       ]),
       'name': FormControl<String>(value: profile?.name, validators: [
         Validators.required,
       ]),
       'birthday': FormControl<String>(
-          value: profile?.birthday?.toDate().isoDate,
+          value: profile?.birthday
+              ?.toDate()
+              .isoDate,
           validators: [
             Validators.required,
           ]),
@@ -89,19 +93,19 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
       ]),
       'address': FormGroup({
         'address':
-            FormControl<String>(value: profile?.address?.address, validators: [
+        FormControl<String>(value: profile?.address?.address, validators: [
           Validators.required,
         ]),
         'district':
-            FormControl<String>(value: profile?.address?.district, validators: [
+        FormControl<String>(value: profile?.address?.district, validators: [
           Validators.required,
         ]),
         'province':
-            FormControl<String>(value: profile?.address?.province, validators: [
+        FormControl<String>(value: profile?.address?.province, validators: [
           Validators.required,
         ]),
         'postcode':
-            FormControl<String>(value: profile?.address?.postcode, validators: [
+        FormControl<String>(value: profile?.address?.postcode, validators: [
           Validators.required,
         ]),
         'country': FormControl<String>(
@@ -112,11 +116,11 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
       }),
       'contact': FormGroup({
         'phone':
-            FormControl<String>(value: profile?.contact?.phone, validators: [
+        FormControl<String>(value: profile?.contact?.phone, validators: [
           Validators.required,
         ]),
         'email':
-            FormControl<String>(value: profile?.contact?.email, validators: [
+        FormControl<String>(value: profile?.contact?.email, validators: [
           Validators.email,
           Validators.required,
         ]),
@@ -127,9 +131,11 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
   void _getCurrentLocation() async {
     try {
       Position pos = await determinePosition();
-      setState(() {
-        position = GeoPoint(pos.latitude, pos.longitude);
-      });
+      if (mounted) {
+        setState(() {
+          position = GeoPoint(pos.latitude, pos.longitude);
+        });
+      }
     } catch (e, st) {
       handleError(e, st);
     }
@@ -250,19 +256,19 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                         ),
                         child: (photo?.isNotEmpty ?? false)
                             ? CircleAvatar(
-                                radius: 50,
-                                backgroundImage: NetworkImage(
-                                  photo!,
-                                ),
-                              )
+                          radius: 50,
+                          backgroundImage: NetworkImage(
+                            photo!,
+                          ),
+                        )
                             : Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Icon(
-                                  Icons.add,
-                                  size: 80,
-                                  color: context.theme.primaryColor,
-                                ),
-                              ),
+                          padding: const EdgeInsets.all(15),
+                          child: Icon(
+                            Icons.add,
+                            size: 80,
+                            color: context.theme.primaryColor,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),

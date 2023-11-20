@@ -80,16 +80,112 @@ class _MemberPageState extends State<MemberPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: const CameraPosition(
-        target: LatLng(13.8225814763742, 100.559033556751),
-        zoom: 17,
-      ),
-      zoomControlsEnabled: false,
-      markers: _markers,
-      onMapCreated: (control) {
-        controller?.complete(control);
-      },
+    return Column(
+      children: [
+        Flexible(
+          flex: 6,
+          child: GoogleMap(
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(13.8225814763742, 100.559033556751),
+              zoom: 17,
+            ),
+            zoomControlsEnabled: false,
+            markers: _markers,
+            onMapCreated: (control) {
+              controller?.complete(control);
+            },
+          ),
+        ),
+        Flexible(
+            flex: 3,
+            child: Container(
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                color: context.theme.colorScheme.background,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(15),
+                  topLeft: Radius.circular(15),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Member',
+                        style: context.theme.textTheme.titleLarge
+                            ?.copyWith(color: context.theme.primaryColor),
+                      ),
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Container(
+                            width: double.maxFinite,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: context.theme.primaryColor,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: NetworkImage(
+                                            context.authStore.profile!.img!),
+                                      ),
+                                    ),
+                                    SizedBox(width: 15),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          context.authStore.profile!.name,
+                                          style: context
+                                              .theme.textTheme.titleLarge
+                                              ?.copyWith(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        Row(
+                                          children: [
+                                            ClipOval(
+                                                child: Container(
+                                              color: Colors.green,
+                                              width: 8,
+                                              height: 8,
+                                            )),
+                                            SizedBox(width: 4),
+                                            Text('Online')
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: context.theme.primaryColor,
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ))
+      ],
     );
   }
 }

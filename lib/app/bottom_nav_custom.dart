@@ -28,7 +28,7 @@ class BottomNavCustom extends StatelessWidget {
           ],
         ),
         child: ClipPath(
-          clipper: _MyClipper(),
+          clipper: KungClipper(),
           child: BottomAppBar(
             height: 50,
             color: context.theme.primaryColor,
@@ -129,7 +129,7 @@ class BottomNavCustom extends StatelessWidget {
   }
 }
 
-class _MyClipper extends CustomClipper<Path> {
+class KungClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final Path path = Path();
