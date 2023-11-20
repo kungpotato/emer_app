@@ -28,9 +28,9 @@ class _AppHomeState extends State<AppHome> {
   ];
 
   Future<void> _onItemTapped(int index) async {
-    if (_selectedIndex == 1) {
-      await Future<void>.delayed(Duration(seconds: 3));
-    }
+    // if (_selectedIndex == 1) {
+    //   await Future<void>.delayed(Duration(seconds: 3));
+    // }
     setState(() {
       _selectedIndex = index;
     });
@@ -85,7 +85,6 @@ class _AppHomeState extends State<AppHome> {
     return Scaffold(
       appBar: _getTitle(),
       body: _widgetOptions.elementAt(_selectedIndex),
-      extendBodyBehindAppBar: true,
       bottomNavigationBar: BottomNavCustom(
         selectedIndex: _selectedIndex,
         onItemTap: _onItemTapped,
