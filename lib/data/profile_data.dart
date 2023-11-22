@@ -68,7 +68,7 @@ class ProfileData {
               .map((e) => MemberData.fromJson(e as Map<String, dynamic>))
               .toList(),
           assistant: (json['assistant'] ?? false) as bool,
-          fcm: (json['assistant'] as String?) ?? '',
+          fcm: (json['fcm'] as String?) ?? '',
           namePrefix: json['namePrefix']?.toString());
     } catch (err, st) {
       handleError(err, st);

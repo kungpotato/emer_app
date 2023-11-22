@@ -41,7 +41,7 @@ class AppState extends State<App> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   final _auth = FirebaseAuth.instance;
 
-  NavigatorState get _navigator => _navigatorKey.currentState!;
+  NavigatorState? get _navigator => _navigatorKey.currentState;
   late ReactionDisposer disposer;
   StreamSubscription<dynamic>? subAuth;
   StreamSubscription<dynamic>? subFcm;
@@ -51,9 +51,10 @@ class AppState extends State<App> {
   void initState() {
     super.initState();
     ThemePreferences.instance.init();
-
+    if (_navigator != null) {
+      FirebaseMessagingService.instance.initialize(_navigator!);
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await FirebaseMessagingService.instance.initialize(_navigator);
       subFcm = FirebaseMessagingService.instance.onRefreshToken().listen((tk) {
         context.authStore.profile?.ref!.update({'fcm': tk});
       });
@@ -76,12 +77,14 @@ class AppState extends State<App> {
         return context.authStore.getDbProfile(user).flatMap((dbUser) {
           if (dbUser != null) {
             context.authStore.setProfile(dbUser);
-            return context.authStore.getHealthInfo(dbUser.id!).doOnData((_) {
+            return context.authStore.getHealthInfo(dbUser.id!).flatMap((info) {
               if (dbUser.fcm.isEmpty) {
-                Stream.fromFuture(FirebaseMessaging.instance.getToken())
-                    .flatMap((value) => Stream<void>.fromFuture(
-                        dbUser.ref!.update({'fcm': value ?? ''})));
+                return Stream.fromFuture(FirebaseMessaging.instance.getToken())
+                    .flatMap((value) => Stream.fromFuture(
+                            dbUser.ref!.update({'fcm': value ?? ''}))
+                        .map((event) => info));
               }
+              return Stream.value(info);
             }).flatMap((info) {
               // if (dbUser.verify != true &&
               //     dbUser.role == ProfileRole.doctor) {
@@ -121,41 +124,41 @@ class AppState extends State<App> {
       (_) => authStore.status,
       (status) {
         if (status == AuthStatus.noInternet) {
-          _navigator.pushAndRemoveUntil(
+          _navigator?.pushAndRemoveUntil(
             MaterialPageRoute<void>(
               builder: (context) => const NoInternetPage(),
             ),
             (route) => false,
           );
         } else if (status == AuthStatus.unauthenticated) {
-          _navigator.pushAndRemoveUntil(
+          _navigator?.pushAndRemoveUntil(
             MaterialPageRoute<dynamic>(
               builder: (context) => const LoginPage(),
             ),
             (route) => false,
           );
         } else if (status == AuthStatus.userInfo) {
-          _navigator.pushAndRemoveUntil(
+          _navigator?.pushAndRemoveUntil(
             MaterialPageRoute<void>(
               builder: (context) => const UserProfileFormPage(),
             ),
             (route) => false,
           );
         } else if (status == AuthStatus.verify) {
-          _navigator.push(
+          _navigator?.push(
             MaterialPageRoute<void>(
               builder: (context) => const PinVerifyPage(),
             ),
           );
         } else if (status == AuthStatus.verifyEmail) {
-          _navigator.pushAndRemoveUntil(
+          _navigator?.pushAndRemoveUntil(
             MaterialPageRoute<dynamic>(
               builder: (context) => VerifyEmailPage(),
             ),
             (route) => false,
           );
         } else if (status == AuthStatus.authenticated) {
-          _navigator.pushAndRemoveUntil(
+          _navigator?.pushAndRemoveUntil(
             MaterialPageRoute<dynamic>(
               builder: (context) => const AppHome(),
             ),
