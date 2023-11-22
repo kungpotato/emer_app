@@ -4,13 +4,11 @@ import 'package:emer_app/shared/helper.dart';
 import 'package:flutter/material.dart';
 
 class VerifyEmailPage extends StatefulWidget {
-
   @override
   State<VerifyEmailPage> createState() => _VerifyEmailPageState();
 }
 
 class _VerifyEmailPageState extends State<VerifyEmailPage> {
-
   @override
   void initState() {
     context.authStore.user?.sendEmailVerification();
@@ -46,7 +44,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                context.authStore.user?.sendEmailVerification();
+                // context.authStore.user?.sendEmailVerification();
                 showSnack(context, text: 'Check your email!!');
               },
               child: Text('Resend Email'),

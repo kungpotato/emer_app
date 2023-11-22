@@ -2,6 +2,7 @@ import 'package:emer_app/app/bottom_nav_custom.dart';
 import 'package:emer_app/pages/device_page.dart';
 import 'package:emer_app/pages/home_page.dart';
 import 'package:emer_app/pages/member_page.dart';
+import 'package:emer_app/pages/my_qr_page.dart';
 import 'package:emer_app/pages/profile_page.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
@@ -47,14 +48,14 @@ class _AppHomeState extends State<AppHome> {
             color: context.theme.primaryColor,
           ),
           actions: [
-            TextButton.icon(
-              onPressed: () {},
-              label: Text(
-                'ADD MEMBER',
-                style: context.theme.textTheme.labelSmall?.copyWith(
-                    color: context.theme.primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => MyQrPage(),
+                    ));
+              },
               icon: Icon(
                 Icons.qr_code,
                 color: context.theme.primaryColor,
