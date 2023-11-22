@@ -25,6 +25,7 @@ class ProfileData {
       this.verify,
       this.education,
       this.contact,
+      required this.fcm,
       this.members = const [],
       this.assistant = false});
 
@@ -67,6 +68,7 @@ class ProfileData {
               .map((e) => MemberData.fromJson(e as Map<String, dynamic>))
               .toList(),
           assistant: (json['assistant'] ?? false) as bool,
+          fcm: (json['assistant'] as String?) ?? '',
           namePrefix: json['namePrefix']?.toString());
     } catch (err, st) {
       handleError(err, st);
@@ -93,6 +95,7 @@ class ProfileData {
   final ContactInfo? contact;
   final bool assistant;
   final List<MemberData> members;
+  final String fcm;
 
   Map<String, dynamic> toMap() {
     return {
@@ -112,6 +115,7 @@ class ProfileData {
       'verify': verify,
       'contact': contact?.toMap(),
       'assistant': assistant,
+      'fcm': fcm,
       'members': members..map((e) => e.toMap()),
     };
   }

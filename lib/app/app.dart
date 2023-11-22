@@ -7,6 +7,7 @@ import 'package:emer_app/app/authentication/login_page.dart';
 import 'package:emer_app/app/authentication/splash_page.dart';
 import 'package:emer_app/app/authentication/store/auth_store.dart';
 import 'package:emer_app/app/locale/locale_store.dart';
+import 'package:emer_app/app/services/firebase_messaging_service.dart';
 import 'package:emer_app/app/storage/theme_storeage.dart';
 import 'package:emer_app/app/theme/app_theme.dart';
 import 'package:emer_app/core/exceptions/app_error_hadler.dart';
@@ -18,6 +19,7 @@ import 'package:emer_app/pages/verify_email_page.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
 import 'package:emer_app/shared/helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -42,13 +44,19 @@ class AppState extends State<App> {
   NavigatorState get _navigator => _navigatorKey.currentState!;
   late ReactionDisposer disposer;
   StreamSubscription<dynamic>? subAuth;
+  StreamSubscription<dynamic>? subFcm;
   late StreamSubscription<dynamic> subConnect;
 
   @override
   void initState() {
     super.initState();
     ThemePreferences.instance.init();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await FirebaseMessagingService.instance.initialize(_navigator);
+      subFcm = FirebaseMessagingService.instance.onRefreshToken().listen((tk) {
+        context.authStore.profile?.ref!.update({'fcm': tk});
+      });
       subConnect = Connectivity().onConnectivityChanged.listen((result) {
         if (result == ConnectivityResult.none) {
           subAuth?.cancel();
@@ -68,7 +76,13 @@ class AppState extends State<App> {
         return context.authStore.getDbProfile(user).flatMap((dbUser) {
           if (dbUser != null) {
             context.authStore.setProfile(dbUser);
-            return context.authStore.getHealthInfo(dbUser.id!).flatMap((info) {
+            return context.authStore.getHealthInfo(dbUser.id!).doOnData((_) {
+              if (dbUser.fcm.isEmpty) {
+                Stream.fromFuture(FirebaseMessaging.instance.getToken())
+                    .flatMap((value) => Stream<void>.fromFuture(
+                        dbUser.ref!.update({'fcm': value ?? ''})));
+              }
+            }).flatMap((info) {
               // if (dbUser.verify != true &&
               //     dbUser.role == ProfileRole.doctor) {
               //   context.authStore.setVerifyState();
@@ -104,28 +118,28 @@ class AppState extends State<App> {
   void watchAuthState() {
     final authStore = Provider.of<AuthStore>(context, listen: false);
     disposer = reaction(
-          (_) => authStore.status,
-          (status) {
+      (_) => authStore.status,
+      (status) {
         if (status == AuthStatus.noInternet) {
           _navigator.pushAndRemoveUntil(
             MaterialPageRoute<void>(
               builder: (context) => const NoInternetPage(),
             ),
-                (route) => false,
+            (route) => false,
           );
         } else if (status == AuthStatus.unauthenticated) {
           _navigator.pushAndRemoveUntil(
             MaterialPageRoute<dynamic>(
               builder: (context) => const LoginPage(),
             ),
-                (route) => false,
+            (route) => false,
           );
         } else if (status == AuthStatus.userInfo) {
           _navigator.pushAndRemoveUntil(
             MaterialPageRoute<void>(
               builder: (context) => const UserProfileFormPage(),
             ),
-                (route) => false,
+            (route) => false,
           );
         } else if (status == AuthStatus.verify) {
           _navigator.push(
@@ -138,14 +152,14 @@ class AppState extends State<App> {
             MaterialPageRoute<dynamic>(
               builder: (context) => VerifyEmailPage(),
             ),
-                (route) => false,
+            (route) => false,
           );
         } else if (status == AuthStatus.authenticated) {
           _navigator.pushAndRemoveUntil(
             MaterialPageRoute<dynamic>(
               builder: (context) => const AppHome(),
             ),
-                (route) => false,
+            (route) => false,
           );
         }
       },
@@ -162,6 +176,7 @@ class AppState extends State<App> {
     disposer.call();
     subAuth?.cancel();
     subConnect.cancel();
+    subFcm?.cancel();
   }
 
   @override
@@ -172,37 +187,33 @@ class AppState extends State<App> {
       light: MyThemes.lightTheme,
       dark: MyThemes.darkTheme,
       initial: widget.adaptiveThemeMode ?? AdaptiveThemeMode.light,
-      builder: (light, dark) =>
-          Observer(
-            builder: (context) =>
-                ReactiveFormConfig(
-                  validationMessages: {
-                    ValidationMessage.required: (
-                        error) => 'Should not be empty',
-                    ValidationMessage.email: (error) => 'Invalid email',
-                  },
-                  child: MaterialApp(
-                    title: 'My App',
-                    theme: light,
-                    darkTheme: dark,
-                    localizationsDelegates: [
-                      AppLocalizations.delegate,
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    supportedLocales: [
-                      Locale('th'),
-                      Locale('en'),
-                    ],
-                    locale: localeStore.locale,
-                    navigatorKey: _navigatorKey,
-                    onGenerateRoute: (settings) =>
-                        MaterialPageRoute(
-                            builder: (context) => const SplashPage()),
-                  ),
-                ),
+      builder: (light, dark) => Observer(
+        builder: (context) => ReactiveFormConfig(
+          validationMessages: {
+            ValidationMessage.required: (error) => 'Should not be empty',
+            ValidationMessage.email: (error) => 'Invalid email',
+          },
+          child: MaterialApp(
+            title: 'My App',
+            theme: light,
+            darkTheme: dark,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              Locale('th'),
+              Locale('en'),
+            ],
+            locale: localeStore.locale,
+            navigatorKey: _navigatorKey,
+            onGenerateRoute: (settings) =>
+                MaterialPageRoute(builder: (context) => const SplashPage()),
           ),
+        ),
+      ),
     );
   }
 }

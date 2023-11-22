@@ -82,7 +82,7 @@ class _MyQrPageState extends State<MyQrPage> {
               radius: 60,
             ),
             Text(
-              data.name ?? '',
+              data.name,
               style: context.theme.textTheme.titleLarge
                   ?.copyWith(color: Colors.black),
             ),

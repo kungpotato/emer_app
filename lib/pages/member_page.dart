@@ -40,8 +40,8 @@ class _MemberPageState extends State<MemberPage> {
             await Future.wait(context.authStore.profile!.members.map((e) async {
           final b64 = await getBase64Image(e.imgUrl);
           return LocationItem(
-              longitude: e.location.longitude ?? 0,
-              latitude: e.location.latitude ?? 0,
+              longitude: e.location.longitude,
+              latitude: e.location.latitude,
               imgBase64: b64);
         }));
 
@@ -54,17 +54,17 @@ class _MemberPageState extends State<MemberPage> {
     });
   }
 
-  void _goToMarker(List<LocationItem> markerList) {
-    if (markerList.isNotEmpty) {
-      controller?.future.then((con) {
-        con.animateCamera(
-          CameraUpdate.newLatLng(
-            LatLng(markerList.first.latitude, markerList.first.longitude),
-          ),
-        );
-      });
-    }
-  }
+  // void _goToMarker(List<LocationItem> markerList) {
+  //   if (markerList.isNotEmpty) {
+  //     controller?.future.then((con) {
+  //       con.animateCamera(
+  //         CameraUpdate.newLatLng(
+  //           LatLng(markerList.first.latitude, markerList.first.longitude),
+  //         ),
+  //       );
+  //     });
+  //   }
+  // }
 
   Future<void> _createCustomImageMarker(List<LocationItem> list) async {
     final newList = <Marker>[];

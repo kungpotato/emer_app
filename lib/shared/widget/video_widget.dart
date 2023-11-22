@@ -45,7 +45,8 @@ class _VideoWidgetState extends State<VideoWidget> {
               await Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => _VideoPlayPage(),
+                    builder: (context) => _VideoPlayPage(
+                        videoUrl: widget.videoUrl ?? _defaultUrl),
                   ));
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,
@@ -72,9 +73,9 @@ class _VideoWidgetState extends State<VideoWidget> {
 }
 
 class _VideoPlayPage extends StatefulWidget {
-  final String? videoUrl;
+  final String videoUrl;
 
-  _VideoPlayPage({Key? key, this.videoUrl}) : super(key: key);
+  _VideoPlayPage({Key? key, required this.videoUrl}) : super(key: key);
 
   @override
   _VideoPlayPageState createState() => _VideoPlayPageState();
@@ -89,7 +90,7 @@ class _VideoPlayPageState extends State<_VideoPlayPage> {
     flickManager = FlickManager(
       autoPlay: true,
       videoPlayerController: VideoPlayerController.networkUrl(
-          Uri.parse(widget.videoUrl ?? _defaultUrl),
+          Uri.parse(widget.videoUrl),
           videoPlayerOptions: VideoPlayerOptions()),
     );
 

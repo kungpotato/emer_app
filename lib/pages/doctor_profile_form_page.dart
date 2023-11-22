@@ -150,6 +150,7 @@ class _UserProfileFormPageState extends State<DoctorProfileFormPage> {
               await FsRef.profileRef.add(
                 ProfileData(
                   role: ProfileRole.user,
+                  fcm: '',
                   name: _nameController.value.text,
                   email: context.authStore.user?.email ?? '',
                   img: photo ?? context.authStore.user?.photoURL,
