@@ -22,6 +22,9 @@ class _MemberPageState extends State<MemberPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (!mounted) {
+        return;
+      }
       final base64 = await getBase64Image(context.authStore.profile!.img!);
       final List<LocationItem> markerList = [
         LocationItem(
@@ -163,11 +166,11 @@ class _MemberPageState extends State<MemberPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Member',
-                        style: context.theme.textTheme.titleLarge
-                            ?.copyWith(color: context.theme.primaryColor),
-                      ),
+                      // Text(
+                      //   'Member',
+                      //   style: context.theme.textTheme.titleLarge
+                      //       ?.copyWith(color: context.theme.primaryColor),
+                      // ),
                       if (context.authStore.profile != null)
                         _cardItem(context.authStore.profile!),
                       if (context.authStore.profile != null)

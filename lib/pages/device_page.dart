@@ -1,3 +1,4 @@
+import 'package:emer_app/shared/widget/video_widget.dart';
 import 'package:flutter/material.dart';
 
 class DevicePage extends StatefulWidget {
@@ -10,8 +11,11 @@ class DevicePage extends StatefulWidget {
 class _DevicePageState extends State<DevicePage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Coming soon'),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        VideoWidget(),
+      ],
     );
   }
 }

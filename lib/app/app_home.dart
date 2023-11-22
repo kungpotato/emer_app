@@ -41,12 +41,12 @@ class _AppHomeState extends State<AppHome> {
     switch (_selectedIndex) {
       case 1:
         return AppBar(
-          title: const Text(''),
-          elevation: 0,
-          leading: Icon(
-            Icons.arrow_back_ios,
-            color: context.theme.primaryColor,
+          title: Text(
+            'Members',
+            style: context.theme.textTheme.titleLarge
+                ?.copyWith(color: context.theme.primaryColor),
           ),
+          elevation: 0,
           actions: [
             IconButton(
               onPressed: () {
@@ -62,6 +62,16 @@ class _AppHomeState extends State<AppHome> {
               ),
             )
           ],
+        );
+      case 2:
+        return AppBar(
+          title: Text(
+            'Devices',
+            style: context.theme.textTheme.titleLarge
+                ?.copyWith(color: context.theme.primaryColor),
+          ),
+          elevation: 0,
+          actions: [],
         );
       case 3:
         return AppBar(
