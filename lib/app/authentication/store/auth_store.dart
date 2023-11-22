@@ -184,6 +184,18 @@ abstract class AuthStoreBase with Store {
     });
   }
 
+  Stream<ProfileData?> getProfileById(String id) {
+    return Stream.fromFuture(FsRef.profileRef.doc(id).get()).map((e) {
+      if (e.exists) {
+        return ProfileData.fromJson(
+          {'id': e.id, 'ref': e.reference, ...?e.data()},
+        );
+      } else {
+        return null;
+      }
+    });
+  }
+
   Stream<HealthInfoData?> getHealthInfo(String id) {
     return FsRef.health(id).snapshots().map((event) {
       if (event.size > 0) {

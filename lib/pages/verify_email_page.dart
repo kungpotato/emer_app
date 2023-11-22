@@ -11,7 +11,7 @@ class VerifyEmailPage extends StatefulWidget {
 class _VerifyEmailPageState extends State<VerifyEmailPage> {
   @override
   void initState() {
-    context.authStore.user?.sendEmailVerification();
+    // context.authStore.user?.sendEmailVerification();
     super.initState();
   }
 
@@ -44,7 +44,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                // context.authStore.user?.sendEmailVerification();
+                context.authStore.user?.sendEmailVerification();
                 showSnack(context, text: 'Check your email!!');
               },
               child: Text('Resend Email'),

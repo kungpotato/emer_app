@@ -94,36 +94,38 @@ class AppState extends State<App> {
     }).listen((user) {
       //
     }, onError: (dynamic err) {
-      showSnack(context, text: err.toString());
-      handleError(err);
+      if (mounted) {
+        showSnack(context, text: err.toString());
+        handleError(err);
+      }
     });
   }
 
   void watchAuthState() {
     final authStore = Provider.of<AuthStore>(context, listen: false);
     disposer = reaction(
-      (_) => authStore.status,
-      (status) {
+          (_) => authStore.status,
+          (status) {
         if (status == AuthStatus.noInternet) {
           _navigator.pushAndRemoveUntil(
             MaterialPageRoute<void>(
               builder: (context) => const NoInternetPage(),
             ),
-            (route) => false,
+                (route) => false,
           );
         } else if (status == AuthStatus.unauthenticated) {
           _navigator.pushAndRemoveUntil(
             MaterialPageRoute<dynamic>(
               builder: (context) => const LoginPage(),
             ),
-            (route) => false,
+                (route) => false,
           );
         } else if (status == AuthStatus.userInfo) {
           _navigator.pushAndRemoveUntil(
             MaterialPageRoute<void>(
               builder: (context) => const UserProfileFormPage(),
             ),
-            (route) => false,
+                (route) => false,
           );
         } else if (status == AuthStatus.verify) {
           _navigator.push(
@@ -136,14 +138,14 @@ class AppState extends State<App> {
             MaterialPageRoute<dynamic>(
               builder: (context) => VerifyEmailPage(),
             ),
-            (route) => false,
+                (route) => false,
           );
         } else if (status == AuthStatus.authenticated) {
           _navigator.pushAndRemoveUntil(
             MaterialPageRoute<dynamic>(
               builder: (context) => const AppHome(),
             ),
-            (route) => false,
+                (route) => false,
           );
         }
       },
@@ -170,33 +172,37 @@ class AppState extends State<App> {
       light: MyThemes.lightTheme,
       dark: MyThemes.darkTheme,
       initial: widget.adaptiveThemeMode ?? AdaptiveThemeMode.light,
-      builder: (light, dark) => Observer(
-        builder: (context) => ReactiveFormConfig(
-          validationMessages: {
-            ValidationMessage.required: (error) => 'Should not be empty',
-            ValidationMessage.email: (error) => 'Invalid email',
-          },
-          child: MaterialApp(
-            title: 'My App',
-            theme: light,
-            darkTheme: dark,
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: [
-              Locale('th'),
-              Locale('en'),
-            ],
-            locale: localeStore.locale,
-            navigatorKey: _navigatorKey,
-            onGenerateRoute: (settings) =>
-                MaterialPageRoute(builder: (context) => const SplashPage()),
+      builder: (light, dark) =>
+          Observer(
+            builder: (context) =>
+                ReactiveFormConfig(
+                  validationMessages: {
+                    ValidationMessage.required: (
+                        error) => 'Should not be empty',
+                    ValidationMessage.email: (error) => 'Invalid email',
+                  },
+                  child: MaterialApp(
+                    title: 'My App',
+                    theme: light,
+                    darkTheme: dark,
+                    localizationsDelegates: [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: [
+                      Locale('th'),
+                      Locale('en'),
+                    ],
+                    locale: localeStore.locale,
+                    navigatorKey: _navigatorKey,
+                    onGenerateRoute: (settings) =>
+                        MaterialPageRoute(
+                            builder: (context) => const SplashPage()),
+                  ),
+                ),
           ),
-        ),
-      ),
     );
   }
 }

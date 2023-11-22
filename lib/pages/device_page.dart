@@ -10,6 +10,8 @@ class DevicePage extends StatefulWidget {
 class _DevicePageState extends State<DevicePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Center(
+      child: Text('Coming soon'),
+    );
   }
 }
