@@ -52,6 +52,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
 
   String? photo;
   GeoPoint? position;
+  bool isLoad = false;
 
   @override
   void initState() {
@@ -128,7 +129,7 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
     });
   }
 
-  void _getCurrentLocation() async {
+  Future<void> _getCurrentLocation() async {
     try {
       Position pos = await determinePosition();
       if (mounted) {
@@ -140,6 +141,9 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
     } catch (e, st) {
       handleError(e, st);
     }
+    setState(() {
+      isLoad = false;
+    });
   }
 
   Future<void> _onSubmit(Map<String, dynamic> formData) async {
@@ -499,9 +503,15 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
               width: double.maxFinite,
               child: ElevatedButton(
                 onPressed: () {
+                  if (isLoad) {
+                    return;
+                  }
                   // if (position != null) {
                   //   _openMap(position!.latitude, position!.longitude);
                   // }
+                  setState(() {
+                    isLoad = true;
+                  });
                   _getCurrentLocation();
                 },
                 style: ElevatedButton.styleFrom(
@@ -523,9 +533,11 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8),
-                        child: Image.asset(
-                          'assets/images/logos_google-maps.png',
-                        ),
+                        child: isLoad
+                            ? CircularProgressIndicator()
+                            : Image.asset(
+                                'assets/images/logos_google-maps.png',
+                              ),
                       ),
                     ],
                   ),

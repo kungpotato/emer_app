@@ -71,7 +71,7 @@ class AppState extends State<App> {
   }
 
   void watchUser() {
-    subAuth = _auth.authStateChanges().flatMap((user) {
+    subAuth = _auth.authStateChanges().switchMap((user) {
       if (user != null) {
         context.authStore.setUSer(user);
         return context.authStore.getDbProfile(user).flatMap((dbUser) {
