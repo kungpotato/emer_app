@@ -10,6 +10,10 @@ class CallProcessPage extends StatefulWidget {
 class _CallProcessPageState extends State<CallProcessPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return SafeArea(
+      child: Scaffold(
+        body: Column(children: []),
+      ),
+    );
   }
 }
