@@ -58,14 +58,15 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
   void initState() {
     super.initState();
     _initFormGroups();
-    setState(() {
-      photo =
-          context.authStore.profile?.img ?? context.authStore.user?.photoURL;
-      if (context.authStore.profile?.address?.location != null) {
-        position = GeoPoint(
-            context.authStore.profile?.address?.location?.latitude ?? 0,
-            context.authStore.profile?.address?.location?.longitude ?? 0);
-      }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final pf = context.authStore.profile;
+      setState(() {
+        photo = pf?.img ?? context.authStore.user?.photoURL;
+        if (pf?.address?.location?.latitude != null) {
+          position = GeoPoint(pf?.address?.location?.latitude ?? 0,
+              pf?.address?.location?.longitude ?? 0);
+        }
+      });
     });
   }
 
@@ -152,6 +153,10 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
       'birthday': parseDate(formData['birthday'] as String).toTimestamp(),
       'email': context.authStore.user?.email ?? "",
       'img': photo,
+      'address': {
+        ...context.authStore.profile?.address as Map<String, dynamic>,
+        'location': position
+      }
     });
 
     if (widget.isEdit) {

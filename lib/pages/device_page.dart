@@ -1,4 +1,3 @@
-import 'package:emer_app/shared/widget/video_widget.dart';
 import 'package:flutter/material.dart';
 
 class DevicePage extends StatefulWidget {
@@ -13,9 +12,7 @@ class _DevicePageState extends State<DevicePage> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        VideoWidget(),
-      ],
+      children: [],
     );
   }
 }
