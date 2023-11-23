@@ -110,7 +110,7 @@ class FirebaseMessagingService {
 
   Future<void> _setupLocalNotifications() async {
     const androidInitializationSettings = AndroidInitializationSettings(
-        'ic_launcher'); // Make sure to have a proper icon
+        '@drawable/launcher_icon'); // Make sure to have a proper icon
 
     const iOSInitializationSettings = DarwinInitializationSettings();
 
@@ -136,14 +136,12 @@ class FirebaseMessagingService {
       RemoteNotification? notification) async {
     if (notification != null && !kIsWeb) {
       const AndroidNotificationDetails androidPlatformChannelSpecifics =
-          AndroidNotificationDetails(
-        'your_channel_id',
-        'your_channel_name',
-        channelDescription: 'your_channel_description',
-        importance: Importance.max,
-        priority: Priority.high,
-        showWhen: false,
-      );
+          AndroidNotificationDetails('your_channel_id', 'your_channel_name',
+              channelDescription: 'your_channel_description',
+              importance: Importance.max,
+              priority: Priority.high,
+              showWhen: false,
+              icon: '@drawable/launcher_icon');
 
       const DarwinNotificationDetails iOSPlatformChannelSpecifics =
           DarwinNotificationDetails(
