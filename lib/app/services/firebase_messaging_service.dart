@@ -36,7 +36,6 @@ class FirebaseMessagingService {
 
   Future<void> initialize(NavigatorState nav) async {
     navigator = nav;
-    await _checkInitialMessage();
     if (!kIsWeb) {
       await _firebaseMessaging.requestPermission();
 
@@ -53,7 +52,7 @@ class FirebaseMessagingService {
     }
   }
 
-  Future<void> _checkInitialMessage() async {
+  Future<void> checkInitialMessage() async {
     final RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {

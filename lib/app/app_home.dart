@@ -1,4 +1,5 @@
 import 'package:emer_app/app/bottom_nav_custom.dart';
+import 'package:emer_app/app/services/firebase_messaging_service.dart';
 import 'package:emer_app/pages/device_page.dart';
 import 'package:emer_app/pages/home_page.dart';
 import 'package:emer_app/pages/member_page.dart';
@@ -89,6 +90,14 @@ class _AppHomeState extends State<AppHome> {
       default:
         return null;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      FirebaseMessagingService.instance.checkInitialMessage();
+    });
   }
 
   @override
