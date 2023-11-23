@@ -140,8 +140,7 @@ class FirebaseMessagingService {
               channelDescription: 'your_channel_description',
               importance: Importance.max,
               priority: Priority.high,
-              showWhen: false,
-              icon: '@drawable/launcher_icon');
+              showWhen: false);
 
       const DarwinNotificationDetails iOSPlatformChannelSpecifics =
           DarwinNotificationDetails(
