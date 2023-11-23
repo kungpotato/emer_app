@@ -402,9 +402,9 @@ class _InsuranceFromPageState extends State<InsuranceFromPage> {
             InputWidget<String>(
               label: 'Phone Number',
               name: 'agentNumber',
-              maxLength: 10,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10)
               ],
               keyboardType: TextInputType.number,
             ),

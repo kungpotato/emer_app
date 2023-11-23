@@ -153,8 +153,10 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
       'birthday': parseDate(formData['birthday'] as String).toTimestamp(),
       'email': context.authStore.user?.email ?? "",
       'img': photo,
+      'members': context.authStore.profile?.members.map((e) => e.toMap()) ?? [],
       'address': {
         ...?context.authStore.profile?.address?.toMap(),
+        ...formData['address'] as Map<String, dynamic>,
         'location': {
           'latitude': position?.latitude ?? 0,
           'longitude': position?.longitude ?? 0,

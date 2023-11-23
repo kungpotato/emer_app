@@ -5,7 +5,9 @@ import 'package:emer_app/shared/widget/video_widget.dart';
 import 'package:flutter/material.dart';
 
 class AlertDetail extends StatefulWidget {
-  const AlertDetail({super.key});
+  const AlertDetail({super.key, required this.videoUrl});
+
+  final String videoUrl;
 
   @override
   State<AlertDetail> createState() => _AlertDetailState();
@@ -69,7 +71,7 @@ class _AlertDetailState extends State<AlertDetail> {
                 color: Colors.red,
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: VideoWidget(),
+                  child: VideoWidget(videoUrl: widget.videoUrl),
                 )),
             SizedBox(height: 20),
             Row(

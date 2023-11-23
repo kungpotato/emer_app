@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:emer_app/app/services/firestore_ref.dart';
 import 'package:emer_app/firebase_options.dart';
 import 'package:emer_app/pages/alert_detail.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -56,7 +57,18 @@ class FirebaseMessagingService {
     final RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      print(initialMessage.data);
+      final ref = FsRef.profileRef
+          .doc(initialMessage.data['userId'] as String)
+          .collection('falling')
+          .doc('1234');
+      final res = await ref.get();
+      final data = res.data() as Map<String, dynamic>;
+      await navigator.push(
+        MaterialPageRoute<void>(
+          builder: (context) =>
+              AlertDetail(videoUrl: data['videoURL'] as String),
+        ),
+      );
     }
   }
 
@@ -65,9 +77,15 @@ class FirebaseMessagingService {
   }
 
   Future<void> _handleMessageTap(RemoteMessage message) async {
+    final ref = FsRef.profileRef
+        .doc(message.data['userId'] as String)
+        .collection('falling')
+        .doc('1234');
+    final res = await ref.get();
+    final data = res.data() as Map<String, dynamic>;
     await navigator.push(
       MaterialPageRoute<void>(
-        builder: (context) => const AlertDetail(),
+        builder: (context) => AlertDetail(videoUrl: data['videoURL'] as String),
       ),
     );
   }
