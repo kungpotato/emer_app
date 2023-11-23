@@ -154,8 +154,11 @@ class _UserProfileFormPageState extends State<UserProfileFormPage> {
       'email': context.authStore.user?.email ?? "",
       'img': photo,
       'address': {
-        ...context.authStore.profile?.address as Map<String, dynamic>,
-        'location': position
+        ...?context.authStore.profile?.address?.toMap(),
+        'location': {
+          'latitude': position?.latitude ?? 0,
+          'longitude': position?.longitude ?? 0,
+        }
       }
     });
 
