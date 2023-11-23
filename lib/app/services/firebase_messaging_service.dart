@@ -1,16 +1,15 @@
 import 'dart:async';
 
-import 'package:emer_app/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:emer_app/pages/alert_detail.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   print('Handling a background message: ${message.messageId}');
 }
 
@@ -44,8 +43,8 @@ class FirebaseMessagingService {
         _firebaseMessagingBackgroundHandler,
       );
 
-      final fcm = await _firebaseMessaging.getToken();
-      print(fcm);
+      // final fcm = await _firebaseMessaging.getToken();
+      // print(fcm);
 
       await _setupLocalNotifications();
     }
@@ -64,11 +63,11 @@ class FirebaseMessagingService {
   }
 
   Future<void> _handleMessageTap(RemoteMessage message) async {
-    // await navigator.push(
-    //   MaterialPageRoute<void>(
-    //     builder: (context) => const MainMenuPage(),
-    //   ),
-    // );
+    await navigator.push(
+      MaterialPageRoute<void>(
+        builder: (context) => const AlertDetail(),
+      ),
+    );
   }
 
   Future<void> _handleMessage(RemoteMessage message) async {

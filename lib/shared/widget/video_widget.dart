@@ -33,7 +33,9 @@ class _VideoWidgetState extends State<VideoWidget> {
       imageFormat: ImageFormat.JPEG,
       quality: 25,
     );
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -41,34 +43,35 @@ class _VideoWidgetState extends State<VideoWidget> {
     return thumbnailPath == null
         ? Center(child: CircularProgressIndicator())
         : InkWell(
-            onTap: () async {
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => _VideoPlayPage(
-                        videoUrl: widget.videoUrl ?? _defaultUrl),
-                  ));
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.portraitUp,
-              ]);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Container(
-                clipBehavior: Clip.hardEdge,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Image.file(File(thumbnailPath!)),
-                    Icon(Icons.play_circle_outline,
-                        size: 64, color: Colors.white),
-                  ],
-                ),
-              ),
-            ),
-          );
+      onTap: () async {
+        await Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) =>
+                  _VideoPlayPage(
+                      videoUrl: widget.videoUrl ?? _defaultUrl),
+            ));
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+        ]);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(20)),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Image.file(File(thumbnailPath!)),
+              Icon(Icons.play_circle_outline,
+                  size: 64, color: Colors.white),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

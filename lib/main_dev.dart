@@ -8,12 +8,12 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final storeInitializers = StoreInitializers.instance;
-  await storeInitializers.setup();
-  final savedThemeMode = await AdaptiveTheme.getThemeMode();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final storeInitializers = StoreInitializers.instance;
+  await storeInitializers.setup();
+  final savedThemeMode = await AdaptiveTheme.getThemeMode();
   runApp(
     MultiProvider(
       providers: storeInitializers.providers,
