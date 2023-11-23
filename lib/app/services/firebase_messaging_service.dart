@@ -110,7 +110,7 @@ class FirebaseMessagingService {
 
   Future<void> _setupLocalNotifications() async {
     const androidInitializationSettings = AndroidInitializationSettings(
-        '@mipmap/ic_launcher'); // Make sure to have a proper icon
+        '@mipmap-hdpi/ic_launcher'); // Make sure to have a proper icon
 
     const iOSInitializationSettings = DarwinInitializationSettings();
 
