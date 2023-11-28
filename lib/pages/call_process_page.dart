@@ -1,16 +1,23 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:emer_app/app/app_home.dart';
+import 'package:emer_app/app/services/firestore_ref.dart';
 import 'package:emer_app/pages/member_page.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
 import 'package:emer_app/shared/helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:slide_to_act/slide_to_act.dart';
 
 class CallProcessPage extends StatefulWidget {
-  const CallProcessPage({super.key});
+  const CallProcessPage(
+      {super.key, required this.data, required this.pallPerson});
+
+  final Map<String, dynamic> data;
+  final String pallPerson;
 
   @override
   State<CallProcessPage> createState() => _CallProcessPageState();
@@ -19,11 +26,59 @@ class CallProcessPage extends StatefulWidget {
 class _CallProcessPageState extends State<CallProcessPage> {
   Completer<GoogleMapController>? controller = Completer();
   final Set<Marker> _markers = {};
+  String? callId;
+
+  Future<void> makeCall(
+      {required String toNumber,
+      required String fromNumber,
+      required String mp3Url}) async {
+    try {
+      var url = Uri.parse(
+          'https://us-central1-emerapp-59c53.cloudfunctions.net/makeCall');
+      var response = await http.post(url,
+          body: {'to': toNumber, 'from': fromNumber, 'mp3Url': mp3Url});
+      if (response.statusCode == 200) {
+        print('Call initiated: ${response.body}');
+        setState(() {
+          callId = jsonDecode(response.body) as String;
+        });
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error making call: $e');
+    }
+  }
+
+  Future<void> cancelCall(String callSid) async {
+    try {
+      var url = Uri.parse('https://your-firebase-function-url/cancelCall');
+      var response = await http.post(url, body: {'callSid': callSid});
+      if (response.statusCode == 200) {
+        print('Call cancelled: ${response.body}');
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error cancelling call: $e');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (widget.data['status'] != 'start') {
+        final ref = FsRef.profileRef
+            .doc(widget.pallPerson)
+            .collection('falling')
+            .doc('1234');
+        await ref.update({'status': 'end'});
+        makeCall(
+            toNumber: '+66634469903',
+            fromNumber: '+66634469903',
+            mp3Url: 'https://api.twilio.com/cowbell.mp3');
+      }
       if (!mounted) {
         return;
       }
@@ -150,6 +205,7 @@ class _CallProcessPageState extends State<CallProcessPage> {
               },
               icon: Icon(Icons.arrow_back_ios_new),
             ),
+            title: Text('PHONE CALL PROCESS'),
           ),
           body: Stack(children: [
             Align(
@@ -230,10 +286,14 @@ class _CallProcessPageState extends State<CallProcessPage> {
                                                   MaterialStatePropertyAll(
                                                       Colors.white)),
                                       onPressed: null,
-                                      icon: Image.asset(
-                                          'assets/images/mdi_car-emergency.png'),
+                                      icon: Icon(
+                                        Icons.phone,
+                                        color: Colors.black87,
+                                      ),
                                       label: Text(
-                                        'ARRIVE IN 10 MINUTES',
+                                        widget.data['status'] != 'end'
+                                            ? 'CALLING....'
+                                            : 'CALLED',
                                         style: context
                                             .theme.textTheme.labelMedium
                                             ?.copyWith(
@@ -250,7 +310,18 @@ class _CallProcessPageState extends State<CallProcessPage> {
                             height: 60,
                             outerColor: Colors.white,
                             child: Text('SLIDE TO CANCEL'),
-                            onSubmit: () {},
+                            reversed: false,
+                            onSubmit: () async {
+                              final ref = FsRef.profileRef
+                                  .doc(widget.pallPerson)
+                                  .collection('falling')
+                                  .doc('1234');
+                              await ref.update({'status': 'cancel'});
+                              if (callId != null) {
+                                await cancelCall(callId!);
+                              }
+                              Navigator.pop(context);
+                            },
                           )
                         ],
                       ),
