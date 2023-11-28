@@ -9,7 +9,9 @@ import 'package:emer_app/shared/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 
 class AppHome extends StatefulWidget {
-  const AppHome({super.key});
+  const AppHome({super.key, this.isNoMsg});
+
+  final bool? isNoMsg;
 
   @override
   State<AppHome> createState() => _AppHomeState();
@@ -96,7 +98,9 @@ class _AppHomeState extends State<AppHome> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      FirebaseMessagingService.instance.checkInitialMessage();
+      if (widget.isNoMsg != true) {
+        FirebaseMessagingService.instance.checkInitialMessage();
+      }
     });
   }
 

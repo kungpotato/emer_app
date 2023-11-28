@@ -56,18 +56,7 @@ class FirebaseMessagingService {
     final RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      final ref = FsRef.profileRef
-          .doc(initialMessage.data['userId'] as String)
-          .collection('falling')
-          .doc('1234');
-      final res = await ref.get();
-      final data = res.data() as Map<String, dynamic>;
-      await navigator.push(
-        MaterialPageRoute<void>(
-          builder: (context) =>
-              AlertDetail(videoUrl: data['videoURL'] as String),
-        ),
-      );
+      _handleMessageTap(initialMessage);
     }
   }
 

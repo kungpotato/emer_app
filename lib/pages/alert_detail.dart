@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:emer_app/pages/call_process_page.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
 import 'package:emer_app/shared/widget/video_widget.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,12 @@ class _AlertDetailState extends State<AlertDetail> {
           setState(() {
             timer.cancel();
           });
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) => CallProcessPage(),
+            ),
+          );
         } else {
           setState(() {
             _start--;
@@ -83,7 +90,12 @@ class _AlertDetailState extends State<AlertDetail> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red),
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) => CallProcessPage(),
+                            ),
+                          );
                         },
                         child: Text(
                           'Confirm',
