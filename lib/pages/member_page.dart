@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:emer_app/data/profile_data.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
 import 'package:emer_app/shared/helper.dart';
+import 'package:emer_app/shared/widget/card_member_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -175,7 +176,7 @@ class _MemberPageState extends State<MemberPage> {
                         _cardItem(context.authStore.profile!),
                       if (context.authStore.profile != null)
                         ...context.authStore.profile!.members
-                            .map((e) => _cardMemberItem(e))
+                            .map((e) => CardMember(data: e))
                             .toList()
                     ],
                   ),
@@ -206,66 +207,6 @@ class _MemberPageState extends State<MemberPage> {
                     child: CircleAvatar(
                       radius: 30,
                       backgroundImage: NetworkImage(data.img!),
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        data.name,
-                        style: context.theme.textTheme.titleLarge?.copyWith(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        children: [
-                          ClipOval(
-                              child: Container(
-                            color: Colors.green,
-                            width: 8,
-                            height: 8,
-                          )),
-                          SizedBox(width: 4),
-                          Text('Online')
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    color: context.theme.primaryColor,
-                  ))
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _cardMemberItem(MemberData data) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Container(
-          width: double.maxFinite,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: context.theme.primaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(data.imgUrl),
                     ),
                   ),
                   SizedBox(width: 15),

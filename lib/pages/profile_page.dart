@@ -1,6 +1,7 @@
-import 'package:emer_app/pages/call_process_page.dart';
 import 'package:emer_app/pages/insuarance_page.dart';
+import 'package:emer_app/pages/user_profile_form_page.dart';
 import 'package:emer_app/shared/extensions/context_extension.dart';
+import 'package:emer_app/shared/helper.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -97,21 +98,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (context) => CallProcessPage(),
-                          ));
-                      // final res = await Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute<bool?>(
-                      //     builder: (context) =>
-                      //     const UserProfileFormPage(isEdit: true),
-                      //   ),
-                      // );
-                      // if (res ?? false) {
-                      //   showSnack(context, text: 'Success');
-                      // }
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute<void>(
+                      //       builder: (context) => CallProcessPage(),
+                      //     ));
+                      final res = await Navigator.push(
+                        context,
+                        MaterialPageRoute<bool?>(
+                          builder: (context) =>
+                              const UserProfileFormPage(isEdit: true),
+                        ),
+                      );
+                      if (res ?? false) {
+                        showSnack(context, text: 'Success');
+                      }
                     },
                   ),
                 ),
