@@ -22,11 +22,11 @@ class _HomePageState extends State<HomePage> {
               width: double.maxFinite,
               color: context.theme.primaryColor,
               child: Padding(
-                padding: const EdgeInsets.only(right: 15, left: 15),
+                padding: const EdgeInsets.only(right: 15, left: 15, bottom: 15),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 35),
+                    SizedBox(height: 45),
                     Row(
                       children: [
                         IconButton(
