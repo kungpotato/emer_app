@@ -6,9 +6,15 @@ import 'package:emer_app/shared/widget/video_widget.dart';
 import 'package:flutter/material.dart';
 
 class AlertDetail extends StatefulWidget {
-  const AlertDetail({super.key, required this.videoUrl});
+  const AlertDetail(
+      {super.key,
+      required this.videoUrl,
+      required this.fallerPerson,
+      required this.data});
 
   final String videoUrl;
+  final String fallerPerson;
+  final Map<String, dynamic> data;
 
   @override
   State<AlertDetail> createState() => _AlertDetailState();
@@ -30,7 +36,8 @@ class _AlertDetailState extends State<AlertDetail> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute<void>(
-              builder: (context) => CallProcessPage(),
+              builder: (context) => CallProcessPage(
+                  data: widget.data, pallPerson: widget.fallerPerson),
             ),
           );
         } else {
@@ -93,7 +100,9 @@ class _AlertDetailState extends State<AlertDetail> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute<void>(
-                              builder: (context) => CallProcessPage(),
+                              builder: (context) => CallProcessPage(
+                                  data: widget.data,
+                                  pallPerson: widget.fallerPerson),
                             ),
                           );
                         },

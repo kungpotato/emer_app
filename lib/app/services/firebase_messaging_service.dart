@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:emer_app/app/services/firestore_ref.dart';
 import 'package:emer_app/firebase_options.dart';
 import 'package:emer_app/pages/alert_detail.dart';
+import 'package:emer_app/pages/call_process_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -45,8 +46,8 @@ class FirebaseMessagingService {
         _firebaseMessagingBackgroundHandler,
       );
 
-      // final fcm = await _firebaseMessaging.getToken();
-      // print(fcm);
+      final fcm = await _firebaseMessaging.getToken();
+      print(fcm);
 
       await _setupLocalNotifications();
     }
@@ -71,11 +72,23 @@ class FirebaseMessagingService {
         .doc('1234');
     final res = await ref.get();
     final data = res.data() as Map<String, dynamic>;
-    await navigator.push(
-      MaterialPageRoute<void>(
-        builder: (context) => AlertDetail(videoUrl: data['videoURL'] as String),
-      ),
-    );
+    if (res.exists) {
+      if (data['status'] != 'start' && data['status'] != 'end') {
+        await navigator.push(
+          MaterialPageRoute<void>(
+            builder: (context) => AlertDetail(
+                videoUrl: data['videoURL'] as String,
+                fallerPerson: message.data['userId'] as String,
+                data: data),
+          ),
+        );
+      } else {
+        await navigator.push(MaterialPageRoute<void>(
+          builder: (context) => CallProcessPage(
+              data: data, pallPerson: message.data['userId'] as String),
+        ));
+      }
+    }
   }
 
   Future<void> _handleMessage(RemoteMessage message) async {

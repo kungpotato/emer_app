@@ -78,9 +78,8 @@ class AppState extends State<App> {
             context.authStore.setProfile(dbUser);
             return context.authStore.getHealthInfo(dbUser.id!).flatMap((info) {
               return Stream.fromFuture(FirebaseMessaging.instance.getToken())
-                  .flatMap((value) => Stream.fromFuture(dbUser.fcm.isEmpty
-                          ? dbUser.ref!.update({'fcm': value ?? ''})
-                          : Future.value(dbUser))
+                  .flatMap((value) => Stream.fromFuture(
+                          dbUser.ref!.update({'fcm': value ?? ''}))
                       .map((event) => info));
             }).flatMap((info) {
               // if (dbUser.verify != true &&

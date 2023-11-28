@@ -34,25 +34,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       shape: BoxShape.circle,
                     ),
                     child: ((context.authStore.profile?.img?.isNotEmpty ??
-                                false) ||
-                            (context.authStore.user?.photoURL?.isNotEmpty ??
-                                false))
+                        false) ||
+                        (context.authStore.user?.photoURL?.isNotEmpty ??
+                            false))
                         ? CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(
-                              context.authStore.profile?.img ??
-                                  context.authStore.user?.photoURL ??
-                                  '',
-                            ),
-                          )
+                      radius: 50,
+                      backgroundImage: NetworkImage(
+                        context.authStore.profile?.img ??
+                            context.authStore.user?.photoURL ??
+                            '',
+                      ),
+                    )
                         : CircleAvatar(
-                            radius: 50,
-                            child: Text(
-                              context.authStore.user!.email?[0] ?? '',
-                              style: context.theme.textTheme.headlineMedium
-                                  ?.copyWith(color: Colors.white),
-                            ),
-                          ),
+                      radius: 50,
+                      child: Text(
+                        context.authStore.user!.email?[0] ?? '',
+                        style: context.theme.textTheme.headlineMedium
+                            ?.copyWith(color: Colors.white),
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Column(
@@ -98,16 +98,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     onTap: () async {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute<void>(
-                      //       builder: (context) => CallProcessPage(),
-                      //     ));
                       final res = await Navigator.push(
                         context,
                         MaterialPageRoute<bool?>(
                           builder: (context) =>
-                              const UserProfileFormPage(isEdit: true),
+                          const UserProfileFormPage(isEdit: true),
                         ),
                       );
                       if (res ?? false) {
