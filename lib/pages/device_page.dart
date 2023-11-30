@@ -58,57 +58,66 @@ class _DevicePageState extends State<DevicePage> {
               .map((e) => Padding(
                     padding:
                         const EdgeInsets.only(left: 5, right: 5, bottom: 10),
-                    child: Card(
-                      color: context.theme.primaryColor,
-                      margin: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      clipBehavior: Clip.hardEdge,
-                      child: SizedBox(
-                        width: double.maxFinite,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Image.asset(
-                                    'assets/images/image 30.png',
-                                    fit: BoxFit.cover,
-                                    width: double.maxFinite,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) => DeviceForm(data: e),
+                            ));
+                      },
+                      child: Card(
+                        color: context.theme.primaryColor,
+                        margin: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        clipBehavior: Clip.hardEdge,
+                        child: SizedBox(
+                          width: double.maxFinite,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Image.asset(
+                                      'assets/images/image 30.png',
+                                      fit: BoxFit.cover,
+                                      width: double.maxFinite,
+                                    ),
                                   ),
+                                  Positioned(
+                                    bottom: 10,
+                                    right: 10,
+                                    child: Image.asset(
+                                      'assets/images/Vector5.png',
+                                      fit: BoxFit.cover,
+                                      width: 50,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: Text(
+                                  'Camera : ${e.name}',
+                                  style: context.theme.textTheme.titleMedium
+                                      ?.copyWith(color: Colors.white),
                                 ),
-                                Positioned(
-                                  bottom: 10,
-                                  right: 10,
-                                  child: Image.asset(
-                                    'assets/images/Vector5.png',
-                                    fit: BoxFit.cover,
-                                    width: 50,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
-                              child: Text(
-                                'Camera : ${e.name}',
-                                style: context.theme.textTheme.titleMedium
-                                    ?.copyWith(color: Colors.white),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
-                              child: Text(
-                                'Zone : ${e.zoneName}',
-                                style: context.theme.textTheme.titleMedium
-                                    ?.copyWith(color: Colors.white),
-                              ),
-                            )
-                          ],
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: Text(
+                                  'Zone : ${e.zoneName}',
+                                  style: context.theme.textTheme.titleMedium
+                                      ?.copyWith(color: Colors.white),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

@@ -192,9 +192,16 @@ class _DeviceFormState extends State<DeviceForm> {
                                       name: _nameController.value.text,
                                       zoneName: _zoneNameController.value.text,
                                       location: position);
-                                  await FsRef.device(
-                                      context.authStore.profile!.id!)
-                                      .add(data.toMap());
+                                  if (widget.data != null) {
+                                    await FsRef.device(
+                                        context.authStore.profile!.id!)
+                                        .doc(widget.data!.id!).update(
+                                        data.toMap());
+                                  } else {
+                                    await FsRef.device(
+                                        context.authStore.profile!.id!)
+                                        .add(data.toMap());
+                                  }
                                   Navigator.pop(context);
                                 },
                                 child: Text(
