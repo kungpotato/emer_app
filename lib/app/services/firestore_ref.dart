@@ -9,6 +9,9 @@ class FsRef {
 
   static CollectionReference<Map<String, dynamic>> insurance(String doc) =>
       profileRef.doc(doc).collection('insurance');
+
+  static CollectionReference<Map<String, dynamic>> device(String doc) =>
+      profileRef.doc(doc).collection('device');
 }
 
 class StRef {

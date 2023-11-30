@@ -63,8 +63,8 @@ class BottomNavCustom extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/images/Group.png',
-                        height: 30,
+                        'assets/images/Mask group.png',
+                        height: 25,
                         color: selectedIndex == 1 ? Colors.black87 : null,
                       ),
                       Text(
